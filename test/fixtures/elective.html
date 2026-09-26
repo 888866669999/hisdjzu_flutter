@@ -1,0 +1,398 @@
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+
+
+<head id="headerid1">
+	<base target='_self'>
+	<title>学生信息管理_学习完成情况查看</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="湖南强智科技教务系统">
+	<meta http-equiv="description" content="湖南强智科技教务系统">
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<script type="text/javascript" src="/jsxsd/js/jquery-min.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/js/common.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/js/iepngfix_tilebg.js" language="javascript" ></script>
+
+<script type="text/javascript" src="/jsxsd/js/jquery.autocomplete.min.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsxsd/assets/plugins/layui/laydate.js"></script>
+<script src="/jsxsd/assets/plugins/layui/layui.all.js"></script>
+<script type="text/javascript" src="/jsxsd/assets/plugins/pagination/pagination.js" language="javascript" ></script>
+<link href="/jsxsd/framework/images/common.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/framework/images/blue.css" rel="stylesheet" type="text/css" id="link_theme" />
+<link href="/jsxsd/framework/images/workstation.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/css/easyui.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/reset-table-style.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/ui.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/layui/layui.css">
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/layui/laydate.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/pagination/pagination.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/timetable-inquire.css" />
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/query-condition-div.css" />
+</head>
+<style type="text/css">
+	.loading-mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 9999;
+		display: none;
+	}
+	.loading-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #333;
+		text-align: center;
+		background-color: #fff;
+		padding-top: 16px;
+		padding: 20px;
+		border-radius: 2px;
+	}
+
+	.spinner {
+		margin: 20px auto;
+		width: 40px;
+		height: 40px;
+		border: 4px solid #f3f3f3;
+		border-radius: 50%;
+		border-top: 4px solid #3498db;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>
+<iframe id="notSession" name="notSession" style="display: none;" src=""></iframe>
+<input type="hidden" name="shouyedizhi" id="shouyedizhi" value="/jsxsd"/>
+<div class="loading-mask" id="loadingMask-dc" style="display:none">
+	<div class="loading-content">
+		<div class="spinner"></div>
+		<h3>数据导出中，请稍候...</h3>
+	</div>
+</div>
+<div class="loading-mask" id="loadingMask-dr" style="display:none">
+	<div class="loading-content">
+		<div class="spinner"></div>
+		<h3>数据导入中，请稍候...</h3>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	window.setInterval(function(){
+		 document.getElementById("notSession").src = "/jsxsd/framework/blankPage.jsp";
+	 }, 1000 * 60 * 10);
+	
+
+});
+
+
+</script>
+
+
+<body>
+ 
+<div class="Nsb_pw">
+	
+
+
+
+
+
+
+
+ 
+	<div class="Nsb_layout_r">
+		<div class="Nsb_layout_r title" align="center">2025 能源与动力工程（拔尖创新班） &nbsp;修读情况审核报告</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="layui-table">
+			<tr>　
+				<th class="Nsb_r_list_thb"   width="20%" scope="col">课程体系(属性)</th>
+				<th class="Nsb_r_list_thb" scope="col">毕业要求学分</th>
+				<th class="Nsb_r_list_thb" scope="col">已修学分</th>
+				<th class="Nsb_r_list_thb" scope="col">正修读学分</th>
+				<th class="Nsb_r_list_thb" scope="col">毕业还需学分</th>
+				<th class="Nsb_r_list_thb" scope="col">详情</th>
+			</tr>
+			
+			
+			
+			
+
+
+			
+			<tr>
+				
+				<td align="left">学科基础必修课(必修)</td>
+				
+				<td align="center">38</td>
+				<td align="center">14.0</td>
+				<td align="center">9.5</td>
+				<td align="center">14.5</td>
+				<td align="center" onclick="toShowxq('学科基础必修课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">公共必修课(必修)</td>
+				
+				<td align="center">28.5</td>
+				<td align="center">6.0</td>
+				<td align="center">6.5</td>
+				<td align="center">16.0</td>
+				<td align="center" onclick="toShowxq('公共必修课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">综合实践课(实践)</td>
+				
+				<td align="center">19</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">19.0</td>
+				<td align="center" onclick="toShowxq('综合实践课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">专业限选课(限选)</td>
+				
+				<td align="center">17.5</td>
+				<td align="center">0.0</td>
+				<td align="center">2.0</td>
+				<td align="center">15.5</td>
+				<td align="center" onclick="toShowxq('专业限选课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">专业基础必修课(必修)</td>
+				
+				<td align="center">17</td>
+				<td align="center">0.0</td>
+				<td align="center">3.0</td>
+				<td align="center">14.0</td>
+				<td align="center" onclick="toShowxq('专业基础必修课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">专业任选课(任选)</td>
+				
+				<td align="center">6</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">6.0</td>
+				<td align="center" onclick="toShowxq('专业任选课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">素质拓展必修课(必修)</td>
+				
+				<td align="center">10</td>
+				<td align="center">2.0</td>
+				<td align="center">0.0</td>
+				<td align="center">8.0</td>
+				<td align="center" onclick="toShowxq('素质拓展必修课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">专业必修课(必修)</td>
+				
+				<td align="center">3.5</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">3.5</td>
+				<td align="center" onclick="toShowxq('专业必修课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">四史课程组(必修)</td>
+				
+				<td align="center">1</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">1.0</td>
+				<td align="center" onclick="toShowxq('四史课程组')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">专业实践课(实践)</td>
+				
+				<td align="center">12</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">12.0</td>
+				<td align="center" onclick="toShowxq('专业实践课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				
+				<td align="left">基础实践课(实践)</td>
+				
+				<td align="center">6.5</td>
+				<td align="center">0.0</td>
+				<td align="center">0.0</td>
+				<td align="center">6.5</td>
+				<td align="center" onclick="toShowxq('基础实践课')"  style="color: #3B82FF">详情</td>
+			</tr>
+			
+			<tr>
+				<td align="center"><b>总计</b></td>
+				<td align="center"><b>159.0</b></td>
+				<td align="center"><b>22.0</b></td>
+				<td align="center"><b>21.0</b></td>
+				<td align="center"><b>116.0</b></td>
+				<td align="center"><b></b></td>
+			</tr>
+		</table>
+		<br/>
+		<div class="Nsb_layout_r title" align="center">公选课修读情况</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="layui-table">
+				<tr>　
+					<th class="Nsb_r_list_thb"   width="20%" scope="col">公选课分类</th>
+					<th class="Nsb_r_list_thb" scope="col">毕业要求学分</th>
+					<th class="Nsb_r_list_thb" scope="col">已修学分</th>
+					<th class="Nsb_r_list_thb" scope="col">正修读学分</th>
+					<th class="Nsb_r_list_thb" scope="col">毕业还需学分</th>
+					<th class="Nsb_r_list_thb" scope="col">详情</th>
+				</tr>
+				
+				
+				
+				
+
+
+				
+				<tr>
+
+					<td align="right">人文社科类</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('人文社科类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">外语与计算机类</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('外语与计算机类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">体育卫生与艺术类</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('体育卫生与艺术类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">自然科学与工程类</td>
+					<td align="center">0</td>
+					<td align="center">2.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('自然科学与工程类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">美育类</td>
+					<td align="center">2</td>
+					<td align="center">0.0</td>
+					<td align="center">2.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('美育类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">创新创业类</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('创新创业类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">其他类别</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('其他类别')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+
+					<td align="right">经济管理类</td>
+					<td align="center">0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center">0.0</td>
+					<td align="center" onclick="toShowtxxq('经济管理类')" style="color: #3B82FF">详情</td>
+				</tr>
+				
+				<tr>
+					<td align="center"><b>总计</b></td>
+					<td align="center"><b>6.0</b></td>
+					<td align="center"><b>2.0</b></td>
+					<td align="center"><b>2.0</b></td>
+					
+						<td align="center"><b>2.0</b></td>
+					
+					<td align="center"><b></b></td>
+				</tr>
+			</table>
+	</div>
+</div>
+ 
+<script type="text/javascript">
+	function toShowxq(kctxmc) {
+		window.open("/jsxsd/xxwcqk/xxwcqkOnkctxByxq.do?kctxmc="+kctxmc+"","详情","location=no,scrollbars=no,menubars=no,toolbars=no,resizable=no,left=0,top=0,width=900,height=500");
+	}
+	function toShowtxxq(txklbmc) {
+		window.open("/jsxsd/xxwcqk/xxwcqkOnkctxBytxkxq.do?txklbmc="+txklbmc+"","详情","location=no,scrollbars=no,menubars=no,toolbars=no,resizable=no,left=0,top=0,width=900,height=500");
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,1050 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+
+
+<head id="headerid1">
+	<base target='_self'>
+	<title>教室借用申请</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="湖南强智科技教务系统">
+	<meta http-equiv="description" content="湖南强智科技教务系统">
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<script type="text/javascript" src="/jsxsd/js/jquery-min.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/js/common.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/js/iepngfix_tilebg.js" language="javascript" ></script>
+
+<script type="text/javascript" src="/jsxsd/js/jquery.autocomplete.min.js" language="javascript" ></script>
+<script type="text/javascript" src="/jsxsd/assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/jsxsd/assets/plugins/layui/laydate.js"></script>
+<script src="/jsxsd/assets/plugins/layui/layui.all.js"></script>
+<script type="text/javascript" src="/jsxsd/assets/plugins/pagination/pagination.js" language="javascript" ></script>
+<link href="/jsxsd/framework/images/common.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/framework/images/blue.css" rel="stylesheet" type="text/css" id="link_theme" />
+<link href="/jsxsd/framework/images/workstation.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/css/easyui.css" rel="stylesheet" type="text/css" />
+<link href="/jsxsd/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/reset-table-style.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/ui.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/layui/layui.css">
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/layui/laydate.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/plugins/pagination/pagination.css"/>
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/timetable-inquire.css" />
+<link rel="stylesheet" type="text/css" href="/jsxsd/assets/css/modules/query-condition-div.css" />
+</head>
+<style type="text/css">
+	.loading-mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 9999;
+		display: none;
+	}
+	.loading-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #333;
+		text-align: center;
+		background-color: #fff;
+		padding-top: 16px;
+		padding: 20px;
+		border-radius: 2px;
+	}
+
+	.spinner {
+		margin: 20px auto;
+		width: 40px;
+		height: 40px;
+		border: 4px solid #f3f3f3;
+		border-radius: 50%;
+		border-top: 4px solid #3498db;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>
+<iframe id="notSession" name="notSession" style="display: none;" src=""></iframe>
+<input type="hidden" name="shouyedizhi" id="shouyedizhi" value="/jsxsd"/>
+<div class="loading-mask" id="loadingMask-dc" style="display:none">
+	<div class="loading-content">
+		<div class="spinner"></div>
+		<h3>数据导出中，请稍候...</h3>
+	</div>
+</div>
+<div class="loading-mask" id="loadingMask-dr" style="display:none">
+	<div class="loading-content">
+		<div class="spinner"></div>
+		<h3>数据导入中，请稍候...</h3>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	window.setInterval(function(){
+		 document.getElementById("notSession").src = "/jsxsd/framework/blankPage.jsp";
+	 }, 1000 * 60 * 10);
+	
+
+});
+
+
+</script>
+
+
+<style type="text/css">
+
+	.search-form-content {
+		width: 100%;
+		padding: 12px 24px 0px 0px;
+		min-height: 32px;
+		float: left;
+
+	}
+	.search-line {
+		width:248px;
+		height: 32px;
+		/*line-height: 32px;*/
+		margin-left: 24px;
+		margin-bottom: 12px;
+		display: flex;
+		align-items: center;
+		float:left;
+	}
+	.search-line-label {
+		float:left;
+		width: 48px;
+		font-size: 12px;
+		height: 32px;
+		/*line-height: 32px;*/
+		text-align: right;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+	.search-line-input {
+		width: 190px;
+		margin-left: 10px;
+		float:left;
+
+	}
+	.search-line-button {
+		width:248px;
+		height: 32px;
+		line-height: 32px;
+		margin-left: 22px;
+		margin-bottom: 16px;
+		float:right;
+		text-align: right;
+	}
+</style>
+<body style="background-color: #ffffff">
+
+ 
+<div class="Nsb_pw">
+	<!-- 教师 -->
+	
+	<!-- 学生 -->
+	
+		
+
+
+
+
+
+
+
+ 
+	
+	<div class="Nsb_layout_r" id="tag_mainView">
+		<form action="/jsxsd/kbxx/jsjy_query2" id="Form1" name="Form1" target="fcenter"  method="post">
+			<input name="typewhere" id="typewhere" type="hidden" value="jszq" />
+			
+
+			<input type="hidden" id="xnxqh" name="xnxqh" value ="2026-2027-1"/>
+			<input type="hidden" name="gnq_mh" id="gnq_mh" value="" />
+			<input type="hidden" name="jsmc_mh" id="jsmc_mh" value="" />
+            <input type="hidden" name="syjs0601id" id="syjs0601id" value="" />
+
+			<div class="search-form-content" id="search-form-content">
+				<div class="search-line">
+					<div class="search-line-label"><span>学期</span></div>
+					<div class="search-line-input" >
+						<input type="text" value="2026-2027 第一学期" readonly/>
+						
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>校区</span></div>
+					<div class="search-line-input" >
+						<select name="xqbh" id="xqbh" onchange="onChangeXq(this);"  style="width:190px;"><option value="">-请选择-</option>
+							
+								<option value="01">本部</option>
+							
+								<option value="F6119595169C400F9BDA60D6F1CC872F">考试</option>
+							
+								<option value="84F9B0C189A348A8BBFF75F67BD75380">烟台产学研基地</option>
+							
+						</select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>教学区</span></div>
+					<div class="search-line-input" >
+						<select name="jxqbh"  onchange="onChangeGNQ(this);" id="jxqbh" style="width:190px;"><option value="">-请选择-</option></select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>教学楼</span></div>
+					<div class="search-line-input" >
+						<select name="jxlbh" id="jxlbh" onchange="onChangeJxl(this);" style="width:190px;"><option value="">-请选择-</option></select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>教室</span></div>
+					<div class="search-line-input" >
+						<select name="jsbh" id="jsbh" style="width:190px;"><option value="">-请选择-</option></select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>人数</span></div>
+					<div class="search-line-input" >
+							<select style="width:55px;" name="bjfh" id="bjfh">
+						<option value="=">
+										=
+									</option>
+									<option value="&gt;">
+										&gt;
+									</option>
+									<option value="&gt;=">
+										&gt;=
+									</option>
+									<option value="&lt;">
+										&lt;
+									</option>
+									<option value="&lt;=">
+										&lt;=
+									</option>
+									<option value="&lt;&gt;">
+										&lt;&gt;
+									</option>
+					 </select>
+					 <input style="width:131px" type="text" name="rnrs" id="rnrs" size="3" maxlength="4" />
+					</div>
+				</div>
+				
+				<div class="search-line">
+					<div class="search-line-label"><span>教室状态</span></div>
+					<div class="search-line-input" >
+						<select name="jszt" id="jszt" style="width:190px;" size="1" onchange="setStyle()">
+							<option value="" selected>
+								-请选择-
+							</option>
+							
+								
+								
+									<option value="9">
+								
+								M
+								跨模式占用
+								</option>
+							
+								
+								
+									<option value="8">
+								
+								
+								完全空闲
+								</option>
+							
+								
+								
+									<option value="7">
+								
+								Ｌ
+								临时调课
+								</option>
+							
+								
+								
+									<option value="6">
+								
+								Ｇ
+								固定调课
+								</option>
+							
+								
+								
+									<option value="5">
+								
+								      
+								空闲
+								</option>
+							
+								
+								
+									<option value="4">
+								
+								Κ
+								考试
+								</option>
+							
+								
+								
+									<option value="3">
+								
+								Ｘ
+								锁定
+								</option>
+							
+								
+								
+									<option value="2">
+								
+								Ｊ
+								借用
+								</option>
+							
+								
+								
+									<option value="1">
+								
+								◆
+								正常上课
+								</option>
+							
+						</select>
+					</div>
+				</div>
+				
+
+				<div class="search-line">
+					<div class="search-line-label"><span>借用院系</span></div>
+					<div class="search-line-input" >
+						<select style="width:190px;">
+							<option value="">-请选择-</option>
+							
+							<option value="100004">
+									[100004]党委宣传部、统战部
+									</option>
+							
+							<option value="100005">
+									[100005]学生工作部
+									</option>
+							
+							<option value="100009">
+									[100009]团委
+									</option>
+							
+							<option value="100013">
+									[100013]教务处
+									</option>
+							
+							<option value="100016">
+									[100016]招生就业工作处
+									</option>
+							
+							<option value="100020">
+									[100020]国际交流合作处、国际教育学院
+									</option>
+							
+							<option value="200002">
+									[200002]继续教育学院
+									</option>
+							
+							<option value="200007">
+									[200007]工程训练中心
+									</option>
+							
+							<option value="300001">
+									[300001]土木工程学院
+									</option>
+							
+							<option value="300002">
+									[300002]管理工程学院
+									</option>
+							
+							<option value="300003">
+									[300003]热能工程学院
+									</option>
+							
+							<option value="300004">
+									[300004]市政与环境工程学院
+									</option>
+							
+							<option value="300005">
+									[300005]建筑城规学院
+									</option>
+							
+							<option value="300006">
+									[300006]艺术学院
+									</option>
+							
+							<option value="300007">
+									[300007]机电工程学院
+									</option>
+							
+							<option value="300008">
+									[300008]信息与电气工程学院
+									</option>
+							
+							<option value="300010">
+									[300010]商学院
+									</option>
+							
+							<option value="300011">
+									[300011]材料科学与工程学院
+									</option>
+							
+							<option value="300012">
+									[300012]计算机与人工智能学院
+									</option>
+							
+							<option value="300013">
+									[300013]理学院
+									</option>
+							
+							<option value="300014">
+									[300014]法学院
+									</option>
+							
+							<option value="300015">
+									[300015]外国语学院
+									</option>
+							
+							<option value="300016">
+									[300016]交通工程学院
+									</option>
+							
+							<option value="300017">
+									[300017]体育教学部
+									</option>
+							
+							<option value="300018">
+									[300018]测绘地理信息学院
+									</option>
+							
+							<option value="300019">
+									[300019]马克思主义学院
+									</option>
+							
+							<option value="300020">
+									[300020]继续教育学院
+									</option>
+							
+							<option value="CE142891DD3848E698AB31358B7ED4A8">
+									[300021]萨拉曼卡学院
+									</option>
+							
+						</select></div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>周次</span></div>
+					<div class="search-line-input" >
+						<select style="width:85px;" name="zc" size="1" id="zc">
+							<option value="">-请选择-</option>
+							<option value="1">
+								第1周
+							</option>
+							<option value="2">
+								第2周
+							</option>
+							<option value="3">
+								第3周
+							</option>
+							<option value="4">
+								第4周
+							</option>
+							<option value="5">
+								第5周
+							</option>
+							<option value="6">
+								第6周
+							</option>
+							<option value="7">
+								第7周
+							</option>
+							<option value="8">
+								第8周
+							</option>
+							<option value="9">
+								第9周
+							</option>
+							<option value="10">
+								第10周
+							</option>
+							<option value="11">
+								第11周
+							</option>
+							<option value="12">
+								第12周
+							</option>
+							<option value="13">
+								第13周
+							</option>
+							<option value="14">
+								第14周
+							</option>
+							<option value="15">
+								第15周
+							</option>
+							<option value="16">
+								第16周
+							</option>
+							<option value="17">
+								第17周
+							</option>
+							<option value="18">
+								第18周
+							</option>
+							<option value="19">
+								第19周
+							</option>
+							<option value="20">
+								第20周
+							</option>
+							<option value="21">
+								第21周
+							</option>
+							<option value="22">
+								第22周
+							</option>
+							<option value="23">
+								第23周
+							</option>
+							<option value="24">
+								第24周
+							</option>
+							<option value="25">
+								第25周
+							</option>
+							<option value="26">
+								第26周
+							</option>
+							<option value="27">
+								第27周
+							</option>
+							<option value="28">
+								第28周
+							</option>
+							<option value="29">
+								第29周
+							</option>
+							<option value="30">
+								第30周
+							</option>
+						</select>
+						<span class="edu-query-text">至</span>
+						<select style="width:85px;" name="zc2" size="1" id="zc2">
+							<option value="">-请选择-</option>
+							<option value="1">
+								第1周
+							</option>
+							<option value="2">
+								第2周
+							</option>
+							<option value="3">
+								第3周
+							</option>
+							<option value="4">
+								第4周
+							</option>
+							<option value="5">
+								第5周
+							</option>
+							<option value="6">
+								第6周
+							</option>
+							<option value="7">
+								第7周
+							</option>
+							<option value="8">
+								第8周
+							</option>
+							<option value="9">
+								第9周
+							</option>
+							<option value="10">
+								第10周
+							</option>
+							<option value="11">
+								第11周
+							</option>
+							<option value="12">
+								第12周
+							</option>
+							<option value="13">
+								第13周
+							</option>
+							<option value="14">
+								第14周
+							</option>
+							<option value="15">
+								第15周
+							</option>
+							<option value="16">
+								第16周
+							</option>
+							<option value="17">
+								第17周
+							</option>
+							<option value="18">
+								第18周
+							</option>
+							<option value="19">
+								第19周
+							</option>
+							<option value="20">
+								第20周
+							</option>
+							<option value="21">
+								第21周
+							</option>
+							<option value="22">
+								第22周
+							</option>
+							<option value="23">
+								第23周
+							</option>
+							<option value="24">
+								第24周
+							</option>
+							<option value="25">
+								第25周
+							</option>
+							<option value="26">
+								第26周
+							</option>
+							<option value="27">
+								第27周
+							</option>
+							<option value="28">
+								第28周
+							</option>
+							<option value="29">
+								第29周
+							</option>
+							<option value="30">
+								第30周
+							</option>
+						</select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>星期</span></div>
+					<div class="search-line-input" >
+						<select style="width:85px;" name="xq" size="1" id="xq">
+							<option value="">-请选择-</option>
+							<option value="1">
+								一
+							</option>
+							<option value="2">
+								二
+							</option>
+							<option value="3">
+								三
+							</option>
+							<option value="4">
+								四
+							</option>
+							<option value="5">
+								五
+							</option>
+							<option value="6">
+								六
+							</option>
+							<option value="7">
+								日
+							</option>
+						</select>
+						<span class="edu-query-text">至</span>
+						<select style="width:85px;" name="xq2" size="1" id="xq2">
+							<option value="">-请选择-</option>
+							<option value="1">
+								一
+							</option>
+							<option value="2">
+								二
+							</option>
+							<option value="3">
+								三
+							</option>
+							<option value="4">
+								四
+							</option>
+							<option value="5">
+								五
+							</option>
+							<option value="6">
+								六
+							</option>
+							<option value="7">
+								日
+							</option>
+						</select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>节次</span></div>
+					<div class="search-line-input" >
+							<select name="jc" style="width:85px;" size="1" id="jc">
+								<option value="">-请选择-</option>
+					    	</select>
+								<span class="edu-query-text">至</span>
+							<select name="jc2" style="width:85px;" size="1" id="jc2">
+									<option value="">-请选择-</option>
+						  	</select>
+					</div>
+				</div>
+				<div class="search-line">
+					<div class="search-line-label"><span>时间模式</span></div>
+					<div class="search-line-input" >
+						<select name="kbjcmsid" id ="kbjcmsid" style="width:190px">
+						
+							<option  value="6CFDEBADC0D341D885CB8F8970F7528C">默认节次模式</option>
+						
+							<option  value="486EA260E9F8481898F0FABE511236E2">考试节次</option>
+						
+						</select>
+					</div>
+				</div>
+				<div class="search-line" style="width: 1100px">
+					<div class="search-line-label"><span>符号说明</span></div>
+					<div class="search-line-input" style="width: 1000px">
+						
+							<font color="red">M</font>
+							跨模式占用;
+						
+							<font color="red"></font>
+							完全空闲;
+						
+							<font color="darkred">Ｌ</font>
+							临时调课;
+						
+							<font color="blue">Ｇ</font>
+							固定调课;
+						
+							<font color="red">      </font>
+							空闲;
+						
+							<font color="red">Κ</font>
+							考试;
+						
+							<font color="red">Ｘ</font>
+							锁定;
+						
+							<font color="red">Ｊ</font>
+							借用;
+						
+							<font color="black">◆</font>
+							正常上课;
+						
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong style="color: red">请双击空白框借用教室</strong>
+					</div>
+				</div>
+				<div class="search-line-button" >
+					<div class="search-line-label"><span></span></div>
+					<div class="search-line-input" style="">
+						<input style="width: 92px" type="button"  name="button2" class="edu-btn" value="导出" onclick="JsPrintKxjsServer()">
+						<a onclick="queryKsap()" class="edu-btn primary" id="btn_query" style="width: 92px"><i class="iconfont icon-search"></i>查询</a>
+					</div>
+				</div>
+
+			</div>
+		</form>
+
+	<table border="0" width="100%" style="height: 745px;" cellspacing="0" cellpadding="0"  id="Table2">
+			<tr>
+				<td height="100%" id="frmtop" >
+					<iframe  id="fcenter" name="fcenter" style="height:100%; VISIBILITY: inherit; WIDTH: 100%;border: 0"></iframe>
+				</td>
+			</tr>
+	</table>
+
+	</div>
+</div>
+ 
+<script language="javascript">
+	$(function () {
+		$("#xqbh").find("option:contains('寮步')").attr("selected",true);
+	});
+	function queryKsap() {
+		document.forms["Form1"].submit();
+	}
+	initJc(document.getElementById("xnxqh"),document.getElementById("kbjcmsid"));
+	function onChangeXq(obj){
+		var xqid = $(obj).val();
+		//联动教学区下拉
+        $.ajax({
+            type : "GET",
+            async:false,
+            url : "/jsxsd/kbxx/jsjy_processAjax",
+            data : "&xqid="+xqid+"&requestType=jxq",
+            dataType: "json",
+            success : function(msg) {
+            	AddOptions(msg,"jxqbh");
+            }
+        });
+
+		//联动教学楼下拉
+        $.ajax({
+            type : "GET",
+            async:false,
+            url : "/jsxsd/kbxx/jsjy_processAjax",
+            data : "&xqid="+xqid+"&requestType=jxl",
+            dataType: "json",
+            success : function(msg) {
+            	AddOptions(msg,"jxlbh");
+            }
+        });
+
+		//联动教室下拉
+		$.ajax({
+			type : "GET",
+			async:false,
+			url : "/jsxsd/kbxx/jsjy_processAjax",
+			data : "&xqid="+xqid+"&requestType=newjs",
+			dataType: "json",
+			success : function(msg) {
+				AddOptions(msg,"jsbh");
+			}
+		});
+	}
+
+
+	function onChangeGNQ(obj){
+		var gnqid = $(obj).val();
+		var xqid = $("#xqbh").val();
+		var jxlid = $("#jxlbh").val();
+		//联动教学区下拉
+		$.ajax({
+			type : "GET",
+			async:false,
+			url : "/jsxsd/kbxx/jsjy_processAjax",
+			data : "&gnqid="+gnqid+"&xqid="+xqid+"&requestType=gnq",
+			dataType: "json",
+			success : function(msg) {
+				AddOptions(msg,"jxlbh");
+				$("#jxlbh").val(jxlid);
+			}
+		});
+
+		//联动教室下拉
+		$.ajax({
+			type : "GET",
+			async:false,
+			url : "/jsxsd/kbxx/jsjy_processAjax",
+			data : "&xqid="+xqid+"&gnqid="+gnqid+"&requestType=newjs",
+			dataType: "json",
+			success : function(msg) {
+				AddOptions(msg,"jsbh");
+			}
+		});
+
+	}
+
+	
+		
+		
+		
+		
+			
+			
+			
+			
+			
+			
+				
+			
+		
+	
+
+	function onChangeJxl(obj){
+
+		var jxlid = $(obj).val();
+		var xqid = $("#xqbh").val();
+		var gnqid = $("#jxqbh").val();
+		//联动教室下拉
+        $.ajax({
+            type : "GET",
+            async:false,
+            url : "/jsxsd/kbxx/jsjy_processAjax",
+            data : "&jxlid="+jxlid+"&xqid="+xqid+"&gnqid="+gnqid+"&requestType=js",
+            dataType: "json",
+            success : function(msg) {
+
+
+            		AddOptions(msg,"jsbh");
+					$("#jxqbh").val(gnqid);
+
+
+            }
+        });
+		//联动教室下拉
+		$.ajax({
+			type : "GET",
+			async:false,
+			url : "/jsxsd/kbxx/jsjy_processAjax",
+			data : "&xqid="+xqid+"&gnqid="+gnqid+"&jxlid="+jxlid+"&requestType=newjs",
+			dataType: "json",
+			success : function(msg) {
+				AddOptions(msg,"jsbh");
+			}
+		});
+	}
+
+	function AddOptions(data,id){
+		var obj = $("#"+id);
+		obj.empty();//清除
+		obj.append("<option value=''>-请选择-</option>");
+		for(var i=0;i<data.length;i++){
+			var json = data[i];
+			obj.append("<option value='"+json.dm+"'>"+json.dmmc+"</option>");
+		}
+	}
+
+function JsPrintKxjsServer(){
+		var xnxqh = document.getElementById("xnxqh").value;
+//		var xnxqhmc = document.getElementById("xnxqh").options[document.getElementById("xnxqh").selectedIndex].text
+		var xqbh = $("#xqbh").val();
+		//alert(xqbh);
+		var jxqbh = $("#jxqbh").val();
+		//alert(jxqbh);
+		var jxlbh = $("#jxlbh").val();
+		//alert(jxlbh);
+		var jsbh = $("#jsbh").val();
+		//alert(jsbh);
+		var bjfh = $("#bjfh").val();
+		//alert(bjfh);
+		var rnrs = $("#rnrs").val();
+		//alert(rnrs);
+		var zc = $("#zc").val();
+		var zc2 = $("#zc2").val();
+		var jc = $("#jc").val();
+		var jc2 = $("#jc2").val();
+		var xq = $("#xq").val();
+		var xq2 = $("#xq2").val();
+		var jszt = $("#jszt").val();
+		var kbjcmsid = $("#kbjcmsid").val();
+		if(kbjcmsid == ""){
+			alert("请选择时间模式！");
+			return false;
+		}
+		if("" == jsbh){
+			//判断实验信息教室借用
+			var sjjx0601id = $("#syjs0601id").val();
+			if("" != sjjx0601id){
+				jsbh = $("#syjs0601id").val();
+			}
+
+		}
+//		var querystr = "xnxqh=" + xnxqh + "&zc="+zc+"&zc2="+zc2+"&jc="+jc+"&jc2="+jc2+"&xqbh=" + xqbh + "&jxqbh=" + jxqbh + "&jxlbh=" + jxlbh + "&jsbh=" + jsbh + "&bjfh=" + bjfh + "&rnrs=" + rnrs+"&xnxqhmc=" + xnxqhmc+"&xq=" + xq+"&xq2=" + xq2+"&jszt=" + jszt;
+		var querystr = "xnxqh=" + xnxqh + "&zc="+zc+"&zc2="+zc2+"&jc="+jc+"&jc2="+jc2+"&xqbh=" + xqbh + "&jxqbh=" + jxqbh + "&jxlbh=" + jxlbh + "&jsbh=" + jsbh + "&bjfh=" + bjfh + "&rnrs=" + rnrs+"&xq=" + xq+"&xq2=" + xq2+"&jszt=" + jszt+"&kbjcmsid="+kbjcmsid;
+
+		var htmlurl = "/jsxsd/kbxx/kxjsgl.do?"+querystr+"&excelFs=server";
+		var oldaction = document.forms['Form1'].action;
+		var oldtarget = document.forms['Form1'].target;
+		document.forms['Form1'].action = htmlurl;
+		document.forms['Form1'].target = "backFrame";
+		document.forms['Form1'].submit();
+		document.forms['Form1'].action = oldaction;
+		document.forms['Form1'].target = oldtarget;
+	}
+	function initJc(obj,sjmsObj){
+		$.ajax({
+			type: "GET",
+			url: "/jsxsd/kbxx/initJc",
+			data: {xnxq:obj.value,kbjcmsid:sjmsObj.value},
+			dataType: "json",
+			success: function(data){
+				var jc = $("#jc");
+				var jc2 = $("#jc2");
+				 if(data.success){
+				 	var maxjc = data.mtdjs;
+					var jc = $("#jc");
+					var jc2 = $("#jc2");
+					var length = $("#jc")[0].options.length;
+					if(length != maxjc+1){
+						jc.empty();
+						jc2.empty();
+						jc.append("<option value=''>-请选择-</option>");
+						jc2.append("<option value=''>-请选择-</option>");
+						for (var i=1;i<=maxjc;i++){
+							if(i<10){
+								jc.append("<option value='0"+i+"'>0"+i+"</option>");
+								jc2.append("<option value='0"+i+"'>0"+i+"</option>");
+							}else{
+								jc.append("<option value='"+i+"'>"+i+"</option>");
+								jc2.append("<option value='"+i+"'>"+i+"</option>");
+							}
+						}
+					}
+				}else{
+					alert("查询节次出错，请确认是否设置了该学期课表节次！");
+					jc.empty();
+					jc2.empty();
+					jc.append("<option value=''>-请选择-</option>");
+					jc2.append("<option value=''>-请选择-</option>");
+					return false;
+				}
+
+			}
+		});
+
+	}
+
+	function queryKb(){
+		var kbjcmsid = $("#kbjcmsid").val();
+		if(kbjcmsid == ""){
+			alert("请选择时间模式！");
+			return false;
+		}
+	   window.Form1.submit();
+	}
+    $(function() {
+        if(window.getComputedStyle) {
+            var str = window.getComputedStyle(document.getElementById('search-form-content')).width;
+            str = str.replace(/px/g, '');
+            var length = (parseFloat(str) % (248 + 24)) - 24;
+            $('.search-line-button').css({ 'margin-right': length + 'px' });
+        }else {
+            var str = document.getElementById('search-form-content').currentStyle.width;
+            str = str.replace(/px/g, '');
+            var length = (parseFloat(str) % (248 + 24)) - 24;
+            $('.search-line-button').css({ 'margin-right': length + 'px' });
+        }
+        window.onresize = function() {
+            if(window.getComputedStyle) {
+                var str = window.getComputedStyle(document.getElementById('search-form-content')).width;
+                str = str.replace(/px/g, '');
+                var length = (parseFloat(str) % (248 + 24)) - 24;
+                $('.search-line-button').css({ 'margin-right': length + 'px' });
+            }else {
+                var str = document.getElementById('search-form-content').currentStyle.width;
+                str = str.replace(/px/g, '');
+                var length = (parseFloat(str) % (248 + 24)) - 24;
+                $('.search-line-button').css({ 'margin-right': length + 'px' });
+            }
+        }});
+</script>
+</body>
+</html>

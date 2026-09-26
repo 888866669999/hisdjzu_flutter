@@ -1,0 +1,3161 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>空闲教室查询结果</title></head>
+<body>
+<!-- 真实抓取的「空闲教室」结果页，已脱敏：
+     - 只保留表头三行 + 12 间教室（覆盖 8 个楼栋）
+     - 教室名与占用标记是学校的公开信息，不含个人数据
+     - 教室列数 36（1 名 + 7 天 × 5 大节）必须保持，否则测不出列映射错误 -->
+<table id="dataList"><tr>
+
+				<th style="text-align: left" class="layui-table-col-special bj" scope="col" colspan="36">
+
+					<span style="margin-right: 10px">功能区名称</span><input type="text" name="gnq_mh" id="gnq_mh" value="" onchange="changPrentVal(1);"/>
+
+					<span style="margin-right: 10px;margin-left: 10px">教室名称</span><input type="text" name="jsmc_mh" id="jsmc_mh" value="" onchange="changPrentVal(2);"/>
+
+					<div style="float: right">
+
+						
+
+						
+
+					<button type="button" value="查询" class="edu-btn primary" onclick="queryKb_mh();"  style="vertical-align: top;" ><i class="iconfont icon-search"></i>查询</button>
+
+					</div>
+
+				</th>
+
+			</tr>
+<tr>
+
+				<th class="layui-table-col-special bj" scope="col">
+
+					<label class="checkbox checkbox-xs">
+
+						<input type="checkbox" name="selectAll" id="selectAll" onclick="selectAllJS(this)"  />
+
+					    <i class="icon-checkbox"></i><span>星期</span>
+
+					</label>
+
+				</th>
+
+				
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期一</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期二</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期三</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期四</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期五</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期六</th>
+
+				
+
+					<th class="layui-table-col-special bj" colspan="5" scope="col">星期日</th>
+
+				
+
+			</tr>
+<tr height="60">
+
+				<th   class="bj" ></th>
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc0" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc1" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc2" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc3" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc4" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc5" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc6" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc7" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc8" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc9" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc10" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc11" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc12" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc13" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc14" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc15" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc16" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc17" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc18" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc19" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc20" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc21" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc22" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc23" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc24" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc25" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc26" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc27" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc28" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc29" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+					
+
+						
+
+							<th  class="bj" id="jc30" tdvalue="0102" tdKssj="07:50" tdJssj="09:25">01<br>02<br></th>
+
+						
+
+							<th  class="bj" id="jc31" tdvalue="030405" tdKssj="09:40" tdJssj="12:05">03<br>04<br>05</th>
+
+						
+
+							<th  class="bj" id="jc32" tdvalue="0607" tdKssj="13:40" tdJssj="15:15">06<br>07<br></th>
+
+						
+
+							<th  class="bj" id="jc33" tdvalue="0809" tdKssj="15:30" tdJssj="17:05">08<br>09<br></th>
+
+						
+
+							<th  class="bj" id="jc34" tdvalue="101112" tdKssj="18:40" tdJssj="21:05">10<br>11<br>12</th>
+
+						
+
+					
+
+					
+
+				
+
+			</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="DBA8C59980F742CCAEC20B33925EFC59" onclick="clickTr(this,'1')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="DBA8C59980F742CCAEC20B33925EFC59" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>办公001[媒80](80/35)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｘ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="BW011" onclick="clickTr(this,'2')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="BW011" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>博文馆011[媒H80](80/36)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="BW101" onclick="clickTr(this,'3')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="BW101" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>博文馆101[媒159](159/72)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｘ</font><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Κ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="0014A3CFCE004C8B80B49A2CC866A92E" onclick="clickTr(this,'67')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="0014A3CFCE004C8B80B49A2CC866A92E" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>产融B105[媒200](200/100)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="907F7A810E0D42B590B00D6785C68BD0" onclick="clickTr(this,'68')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="907F7A810E0D42B590B00D6785C68BD0" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>产融B107[媒200](200/100)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="KJ102" onclick="clickTr(this,'78')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="KJ102" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>科技馆102[媒128](128/58)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="KJ110" onclick="clickTr(this,'79')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="KJ110" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>科技馆110[媒190](190/86)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="WW009" onclick="clickTr(this,'90')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="WW009" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>外文馆009[媒144](144/65)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="WW111" onclick="clickTr(this,'91')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="WW111" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>外文馆111[媒159](159/72)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="FC616FD37FCC403AA3F7011FAE8CC954" onclick="clickTr(this,'95')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="FC616FD37FCC403AA3F7011FAE8CC954" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>信息馆108[媒36](36/18)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="ADBF944AECCA41D1B745B2E47DB139A0" onclick="clickTr(this,'96')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="ADBF944AECCA41D1B745B2E47DB139A0" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>信息馆110[媒80](80/40)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｘ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='black'>◆</font></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""><font size='6' color='red'>Ｊ</font></td>
+
+					
+
+
+
+				</tr>
+<tr  onMouseOver="this.style.cursor='hand'" jsbh="1067A8D7B6FD434EB15972C858A8C47A" onclick="clickTr(this,'101')" style="z-index: 1;">
+
+					
+
+						
+
+						
+
+							<td width="180" style="text-align: left;padding-left: 15px">
+
+								<label class="checkbox checkbox-xs">
+
+									<input type="checkbox" value="1067A8D7B6FD434EB15972C858A8C47A" name="jsids"  />
+
+									<i class="icon-checkbox"></i><span>信息楼211(80/80)</span>
+
+								</label>
+
+							</td>
+
+						
+
+					
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+						
+
+						<td width="180" height="32" align="center" ondblclick="clickTd(this)" onmousemove=""></td>
+
+					
+
+
+
+				</tr></table>
+</body></html>
