@@ -7,28 +7,33 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// ===== 发布签名：有 key.properties 就签，没有就出无签名包 =====
+// ===== 发布签名 =====
 //
-// 仓库里**不含任何密钥素材**，公开的 release 产物也是**无签名**的
-// （别人拿到后用自己的密钥重签，或直接 `apksigner sign`）。
+// 仓库里**不含任何密钥素材**。默认用 Android 调试证书签名，
+// 这样 clone 下来 `flutter build apk --release` 得到的包可以直接安装。
 //
-// 为什么不用 debug 密钥凑合：debug 密钥是公开且固定的，用它签出的 release
-// 任何人都能冒名替换 —— 对一个要装到手机上的应用来说，这比不签名更危险
-// （不签名至少装不上，用户会意识到需要自己签）。
+// ===== 为什么用调试证书 =====
+// 调试证书是 Android SDK 自动生成的（`~/.android/debug.keystore`），
+// 人人都有、口令就是 `android`，因此它**不具备防篡改能力** ——
+// 任何人都能签一个同包名、更高版本号的包来替换它。
 //
-// 想自己签一份：在 android/key.properties 里写
+// 对这个应用来说这个取舍可以接受：它不上架商店、只查本人数据、
+// 不接收外部内容；而代价换来的是「拿到源码就能构建出一个能装的包」。
+//
+// 要正式签名（例如将来上架）：在 `android/key.properties` 里写
 //     storeFile=/绝对路径/your.keystore
 //     storePassword=***
 //     keyAlias=***
 //     keyPassword=***
-// 该文件与 *.keystore / *.jks 都已在 .gitignore 里排除。
+// 下面的逻辑会**优先用它**。该文件与 *.keystore / *.jks 都已被
+// .gitignore 排除，不会进仓库。
 val keystorePropsFile = rootProject.file("key.properties")
 val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) {
         keystorePropsFile.inputStream().use { load(it) }
     }
 }
-val hasReleaseKey = keystoreProps.getProperty("storeFile") != null
+val hasOwnKey = keystoreProps.getProperty("storeFile") != null
 
 android {
     namespace = "com.sdjzu.hijianzhu"
@@ -59,7 +64,7 @@ android {
     }
 
     signingConfigs {
-        if (keystoreProps.getProperty("storeFile") != null) {
+        if (hasOwnKey) {
             create("release") {
                 storeFile = file(keystoreProps.getProperty("storeFile"))
                 storePassword = keystoreProps.getProperty("storePassword")
@@ -71,11 +76,12 @@ android {
 
     buildTypes {
         release {
-            signingConfig = if (keystoreProps.getProperty("storeFile") != null) {
+            // 有自有密钥（key.properties）就用它；没有则退回调试证书，
+            // 保证 `flutter build apk --release` 开箱即得可安装的包。
+            signingConfig = if (hasOwnKey) {
                 signingConfigs.getByName("release")
             } else {
-                // 无签名：产物名为 app-release-unsigned.apk
-                null
+                signingConfigs.getByName("debug")
             }
         }
     }
