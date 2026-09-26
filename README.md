@@ -65,7 +65,6 @@ android/app/src/main/
 └── res/layout/today_course_widget.xml
 android/app/src/debug/jniLibs/x86_64/           模拟器专用的 ONNX 运行库
 docs/技术笔记.md                  实现细节、排查记录、已知限制
-tools/                            图标生成、脱敏、开源前审计脚本
 ```
 
 ---
@@ -99,15 +98,6 @@ adb shell am start -n com.sdjzu.hijianzhu/.MainActivity
 
 ```bash
 flutter test
-```
-
-### 开源前自检
-
-```bash
-python tools/check_ignore.py       # 复核 .gitignore 是否挡住敏感路径
-python tools/scan_publishable.py   # 扫描「会入库的文件」里有无真实 PII
-python tools/audit_sensitive.py .  # 模式匹配扫源码
-python tools/audit_sensitive.py app-release.apk   # 扫最终产物
 ```
 
 实现细节、构建环境的坑、排查记录与已知限制，见 [docs/技术笔记.md](docs/技术笔记.md)。
