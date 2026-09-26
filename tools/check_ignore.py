@@ -125,6 +125,11 @@ CASES = [
     ('tools/check_ignore.py', False),
     ('tools/scan_publishable.py', False),
     ('tools/__pycache__/x.pyc', True),
+
+    # --- 发布签名素材：私钥泄露等于别人能冒名发布更新 ---
+    ('android/key.properties', True),
+    ('android/app/my-release.jks', True),
+    ('android/my.keystore', True),
 ]
 
 

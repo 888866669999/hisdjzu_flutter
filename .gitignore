@@ -114,6 +114,14 @@ flutter_*.log
 # 本机绝对路径与 SDK 位置
 local.properties
 
+# 发布签名素材：**绝不入库**（私钥泄露 = 别人可以冒名发布更新）
+#
+# android/app/build.gradle.kts 会读 android/key.properties；
+# 该文件不存在时 release 产物就是**无签名**的（这是公开仓库的默认状态）。
+key.properties
+*.keystore
+*.jks
+
 # Gradle 缓存与构建状态
 .gradle/
 

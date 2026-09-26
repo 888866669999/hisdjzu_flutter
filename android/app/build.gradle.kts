@@ -1,8 +1,34 @@
+// kotlin 脚本的 import 必须在最前面（Gradle 允许它在 plugins 之前）
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+// ===== 发布签名：有 key.properties 就签，没有就出无签名包 =====
+//
+// 仓库里**不含任何密钥素材**，公开的 release 产物也是**无签名**的
+// （别人拿到后用自己的密钥重签，或直接 `apksigner sign`）。
+//
+// 为什么不用 debug 密钥凑合：debug 密钥是公开且固定的，用它签出的 release
+// 任何人都能冒名替换 —— 对一个要装到手机上的应用来说，这比不签名更危险
+// （不签名至少装不上，用户会意识到需要自己签）。
+//
+// 想自己签一份：在 android/key.properties 里写
+//     storeFile=/绝对路径/your.keystore
+//     storePassword=***
+//     keyAlias=***
+//     keyPassword=***
+// 该文件与 *.keystore / *.jks 都已在 .gitignore 里排除。
+val keystorePropsFile = rootProject.file("key.properties")
+val keystoreProps = Properties().apply {
+    if (keystorePropsFile.exists()) {
+        keystorePropsFile.inputStream().use { load(it) }
+    }
+}
+val hasReleaseKey = keystoreProps.getProperty("storeFile") != null
 
 android {
     namespace = "com.sdjzu.hijianzhu"
@@ -32,11 +58,25 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (keystoreProps.getProperty("storeFile") != null) {
+            create("release") {
+                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (keystoreProps.getProperty("storeFile") != null) {
+                signingConfigs.getByName("release")
+            } else {
+                // 无签名：产物名为 app-release-unsigned.apk
+                null
+            }
         }
     }
 }
