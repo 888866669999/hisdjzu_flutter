@@ -23,7 +23,15 @@ void main() {
       expect(r.categories.length, greaterThan(5));
       // 本校页面是单表结构（「学习完成情况查看」），**没有课程明细子表**
       // —— 每行的「详情」是另一个页面，本应用不去抓。因此这里不要求 courses。
-      expect(r.categories.length, 12, reason: '本校页面里有 12 个课程体系');
+      //
+      // 11 个课程体系 + 一行汇总（写作「总计」）。汇总行**不算类别** ——
+      // 早先只认「总学分 / 合计」，于是它不仅没被识别成汇总
+      // （顶部「已修学分」显示 0，而表里明明写着 159.0），
+      // 还冒充了第 12 个类别、渲染成一张可以「设置要求学分」的卡片。
+      expect(r.categories.length, 11, reason: '本校页面里有 11 个课程体系');
+      expect(r.categories.map((ElectiveCategory c) => c.name),
+          isNot(contains('总计')),
+          reason: '「总计」是汇总行，不是课程类别');
       // 要求学分与已修学分都必须读到（列名与参考实现不同，靠表头定位）
       final ElectiveCategory first = r.categories.first;
       expect(first.name, contains('学科基础必修课'));

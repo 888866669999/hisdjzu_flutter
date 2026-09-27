@@ -139,6 +139,17 @@ void main() {
         expect(c.satisfied(), isFalse, reason: '未设置要求时不应判为已达标');
       }
     }
+
+    // ===== 汇总行不能冒充类别（实测踩过）=====
+    // 本校把汇总行写作「总计」，而解析器早先只认 `总学分`/`合计`：
+    //   · 顶部「已修学分」显示 0，而下面表格里明明写着 159.0；
+    //   · 「总计」被当成第 12 个类别渲染成一张可折叠卡片。
+    expect(r.categories.map((ElectiveCategory c) => c.name),
+        everyElement(isNot(contains('总计'))),
+        reason: '「总计」是汇总行，不该出现在类别列表里');
+    expect(r.totalEarned, isNotEmpty,
+        reason: '汇总学分必须取到，否则顶部显示 0');
+    expect(double.tryParse(r.totalEarned), isNotNull);
   });
 
   test('教室：列映射按节次编号行（回归：曾把周三数据算到周一）', () {

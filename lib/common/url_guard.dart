@@ -303,6 +303,25 @@ class UrlGuard {
     if (g == null) {
       return false;
     }
+    // IPv4 映射/兼容地址的**十六进制分组写法**（`::ffff:7f00:1`、
+    // `0:0:0:0:0:ffff:127.0.0.1`）：它们没有点号，上面那个
+    // `contains('.')` 分支接不住，而下面的前缀判定也不认识 ——
+    // 于是同一个环回地址换个写法就被放行（实测验证过）。
+    // 这里按展开后的 8 组判断：前 5 组为 0 且第 6 组是 0 或 0xffff 时，
+    // 后 32 位就是内嵌的 IPv4。
+    bool headZero = true;
+    for (int i = 0; i < 5; i++) {
+      if (g[i] != 0) {
+        headZero = false;
+        break;
+      }
+    }
+    if (headZero && (g[5] == 0 || g[5] == 0xFFFF)) {
+      final int v4 = ((g[6] << 16) | g[7]) & 0xFFFFFFFF;
+      if (isBlockedIpv4(v4)) {
+        return true;
+      }
+    }
     // 未指定（::）与环回（::1）——**必须按展开后的 8 组判断**，
     // 否则 `0:0:0:0:0:0:0:1` 这种全写形式会漏过去（实测踩到过）。
     bool allZeroExceptLast(int last) {
@@ -339,7 +358,27 @@ class UrlGuard {
 
   /// 展开 IPv6 为 8 组 16 位；无法解析返回 null
   static List<int>? _groupsOfIpv6(String t) {
-    final List<String> halves = t.split('::');
+    // ===== 先把「末尾的点分 IPv4」折成两个十六进制组 =====
+    //
+    // `0:0:0:0:0:ffff:127.0.0.1` 是 IPv4 映射地址的**混合写法**（前几组十六
+    // 进制 + 末段点分）。不折算的话：按 ':' 切开的最后一段是 `127.0.0.1`，
+    // `int.tryParse('127.0.0.1', radix: 16)` 返回 null → 整段被判非法 →
+    // 组数不足 8 → 返回 null，调用方判定「不是合法 IPv6」而**放行**。
+    // 实测 `http://[0:0:0:0:0:ffff:127.0.0.1]/` 就是这样绕过环回拦截的。
+    String s = t;
+    final int lastColon = s.lastIndexOf(':');
+    if (lastColon >= 0) {
+      final String tail = s.substring(lastColon + 1);
+      if (tail.contains('.')) {
+        final int? v4 = parseIpv4(tail);
+        if (v4 != null) {
+          final String hi = ((v4 >> 16) & 0xFFFF).toRadixString(16);
+          final String lo = (v4 & 0xFFFF).toRadixString(16);
+          s = '${s.substring(0, lastColon + 1)}$hi:$lo';
+        }
+      }
+    }
+    final List<String> halves = s.split('::');
     if (halves.length > 2) {
       return null;
     }

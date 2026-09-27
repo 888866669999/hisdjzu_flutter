@@ -98,8 +98,16 @@ class ElectiveParser {
       if (name.isEmpty) {
         continue;
       }
-      // 「合计 / 总学分」这类汇总行单独取，不算一个类别
-      if (name.contains('总学分') || name == '合计') {
+      // 「合计 / 总学分 / 总计」这类汇总行单独取，不算一个类别。
+      //
+      // ===== 为什么三个写法都要认（实测踩过）=====
+      // 本校页面写的是 **`总计`**，而早先只认 `总学分` 与 `合计`：
+      //   · 汇总值取不到 → 页面顶部「已修学分」显示 **0**，
+      //     而下面表格里明明写着 159.0；
+      //   · `总计` 还会被当成**第 12 个类别**渲染成一张可折叠卡片，
+      //     用户能给它「设置要求学分」—— 而它根本不是一个课程类别。
+      // 各校写法不同，因此按「是不是汇总行」判断，而不是死认某一个词。
+      if (name.contains('总学分') || name.contains('合计') || name.contains('总计')) {
         r.totalEarned = at(colEarned);
         r.totalOngoing = at(colOngoing);
         continue;
