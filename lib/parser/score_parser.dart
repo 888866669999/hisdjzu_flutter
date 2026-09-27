@@ -13,6 +13,41 @@ library;
 import '../model/models.dart';
 import 'html_lite.dart';
 
+/// 成绩结果页的解析结果。
+///
+/// `recognized` 表示「这页确实是成绩结果页」。它与 `records` 是否为空
+/// 是**两件事**，调用方必须分开看 —— 见 [ScoreParser.parsePage] 的说明。
+class ScorePageResult {
+  const ScorePageResult(this.records, this.recognized);
+
+  final List<ScoreRecord> records;
+  final bool recognized;
+}
+
+/// 决定列表该采用新结果、还是保留旧数据。
+///
+/// ===== 为什么把它抽成独立的纯函数 =====
+/// 这段判断就是「成绩页学期筛选看起来没反应」那个缺陷的**全部所在**：
+/// 原来写成「新结果非空才覆盖」，于是切到**没有成绩的学期**时，
+/// 服务端如实回空、判断却选择保留旧数据，列表还显示上一个学期的成绩。
+///
+/// 它原本嵌在页面的 `setState` 里 —— 那种位置靠 widget 测试才能覆盖，
+/// 而 widget 测试要起整页（网络、缓存、主题都要打桩），成本高到没人会为
+/// 这一行写。抽出来之后，这个判断可以用几个纯函数用例钉死。
+///
+/// 判据必须是 [ScorePageResult.recognized]（「这是不是结果页」），
+/// **不能**是「记录是不是空的」—— 后者把「该学期没有成绩」与
+/// 「这次查询没拿到结果」混为一谈。
+List<ScoreRecord> mergeScoreRecords(
+  List<ScoreRecord> current,
+  ScorePageResult page,
+) {
+  if (page.recognized || current.isEmpty) {
+    return page.records;
+  }
+  return current;
+}
+
 class ScoreParser {
   static const List<String> _defaultCols = <String>[
     '序号',
@@ -30,11 +65,28 @@ class ScoreParser {
     //   而读不到时现在是空串、不是错列的值。）
   ];
 
-  static List<ScoreRecord> parse(String html) {
+  static List<ScoreRecord> parse(String html) => parsePage(html).records;
+
+  /// 解析成绩结果页，并报告「这一页认得出来吗」。
+  ///
+  /// ===== 为什么空结果也要带一个标记 =====
+  /// 调用方必须区分两种「空」：
+  ///   · `recognized == true` 且 `records` 为空
+  ///     → **该学期确实没有成绩**（服务端返回了结果表，表里是
+  ///       「未查询到数据」这类空行）。这是权威答案，界面应当如实显示空。
+  ///   · `recognized == false`
+  ///     → 这次响应的**根本不是成绩结果页**（登录页、错误页、半截页面）。
+  ///       此时应当保留上一次的数据，而不是清空。
+  ///
+  /// 早先两者混在一起（只看「记录是不是空的」），于是切到**没有成绩的学期**时，
+  /// 列表仍显示上一个学期的成绩 —— 界面上的学期筛选看起来「点了没反应」。
+  /// 服务端本身是按 `kksj` 正确过滤的（实测 `kksj=2025-2026-1` 只回该学期的
+  /// 13 条、不传则回全部 23 条），问题全在客户端这个判断上。
+  static ScorePageResult parsePage(String html) {
     final HtmlTable? table = HtmlLite.findTableByHeader(html, '课程名称') ??
         HtmlLite.findTableById(html, 'dataList');
     if (table == null) {
-      return <ScoreRecord>[];
+      return const ScorePageResult(<ScoreRecord>[], false);
     }
 
     // 找表头行
@@ -47,7 +99,7 @@ class ScoreParser {
       }
     }
     if (headerRow < 0) {
-      return <ScoreRecord>[];
+      return const ScorePageResult(<ScoreRecord>[], false);
     }
 
     final List<HtmlCell> header = table.rows[headerRow].cells;
@@ -93,7 +145,9 @@ class ScoreParser {
         minor: at('辅修课程'),
       ));
     }
-    return out;
+    // 走到这里说明表头认出来了 —— 即使 out 为空，也是「该学期没有成绩」
+    // 这个权威答案（服务端会在表里放一行「未查询到数据」，上面已跳过）。
+    return ScorePageResult(out, true);
   }
 
   /// 按表头文字定位列：先精确匹配，再包含匹配；**找不到返回 -1**。

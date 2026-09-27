@@ -84,7 +84,7 @@ class _ScorePageState extends State<ScorePage> {
     _scrollCtrl.addListener(_onScroll);
     _semester = PrefStore.loadLastScoreSemester();
     // 先用内存缓存填首帧，再决定要不要联网（避免切页回来闪加载态）
-    _records = _listLoader().peek() ?? <ScoreRecord>[];
+    _records = _listLoader().peek()?.records ?? <ScoreRecord>[];
     _semesters = _semesterLoader().peek() ?? <ChoiceItem>[];
     _load();
   }
@@ -101,11 +101,11 @@ class _ScorePageState extends State<ScorePage> {
   ///
   /// 每次现取（不缓存字段）：账号或学期变了 key 就得变，
   /// 留在字段里会出现「切了学期还在读上一个学期的缓存」这类错位。
-  PageDataLoader<List<ScoreRecord>> _listLoader() => PageDataLoader<List<ScoreRecord>>(
+  PageDataLoader<ScorePageResult> _listLoader() => PageDataLoader<ScorePageResult>(
         key: PageCache.keyOf(
             AppState.instance.account, kCacheScoreList, <String>[_semester]),
         fetch: () => _app.api.getScoresHtml(_semester),
-        parse: ScoreParser.parse,
+        parse: ScoreParser.parsePage,
         ttl: kTtlScoreList,
       );
 
@@ -139,20 +139,22 @@ class _ScorePageState extends State<ScorePage> {
       } catch (_) {
         sems = _semesters;
       }
-      final List<ScoreRecord> recs =
+      final ScorePageResult page =
           (await _listLoader().load(force: force)).data;
       if (!mounted) {
         return;
       }
       setState(() {
         _semesters = sems;
-        // 本地已有数据时，网络返回空结果**不覆盖**：
-        // 这多半是服务端那次查询异常（而不是「成绩被删了」），
-        // 清空会让用户以为数据丢了。
-        // 真没有成绩的学期，本来就不会有缓存，走的也是这条 else 之外的分支。
-        if (recs.isNotEmpty || _records.isEmpty) {
-          _records = recs;
-        }
+        // ===== 「空」有两种，必须分开处理（这里是学期筛选失效的根因）=====
+        // 判据是 `recognized`（这是不是成绩结果页），不是「记录空不空」：
+        //   · 认得出来（哪怕为空）→ 服务端给的权威答案，如实覆盖 ——
+        //     否则切到「没有成绩的学期」时列表还显示上一个学期的成绩，
+        //     用户看到的就是「学期选项点了没反应」；
+        //   · 认不出来（登录页/错误页/半截页）→ 保留旧数据，
+        //     清空会让用户以为成绩丢了。
+        // 判断本身抽成了 mergeScoreRecords，那边有纯函数用例钉着。
+        _records = mergeScoreRecords(_records, page);
         _loading = false;
       });
     } catch (e) {
