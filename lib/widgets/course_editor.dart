@@ -293,23 +293,28 @@ class _CourseEditorDialogState extends State<CourseEditorDialog> {
                           ),
                           const SizedBox(height: 14),
                           // 课名一改就把提示撤掉，避免它挂在那里显得没反应
-                          _field(_name, '课程名称', '如 数据结构',
+                          // 示例文字用「课程1 / 教师1 / 教室1 / 校区1」这种
+                          // **无意义占位**：早先填的是「数据结构 / 张老师 /
+                          // 博文馆211 / 本部」这类具体值 —— 它们看着像真的，
+                          // 用户会以为「是不是该照着填」，而其中还夹着特定的
+                          // 楼名与校区名，换一所学校就是错的。
+                          _field(_name, '课程名称', '如 课程1',
                               onChanged: (_) {
                             if (_hint.isNotEmpty) {
                               setState(() => _hint = '');
                             }
                           }),
                           const SizedBox(height: 10),
-                          _field(_teacher, '教师', '如 张老师'),
+                          _field(_teacher, '教师', '如 教师1'),
                           const SizedBox(height: 10),
                           Row(
                             children: <Widget>[
                               Expanded(
-                                child: _field(_room, '教室', '如 博文馆211'),
+                                child: _field(_room, '教室', '如 教室1'),
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: _field(_campus, '校区', '如 本部'),
+                                child: _field(_campus, '校区', '如 校区1'),
                               ),
                             ],
                           ),
