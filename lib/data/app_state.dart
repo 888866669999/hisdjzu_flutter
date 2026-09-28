@@ -22,6 +22,7 @@ import 'page_cache.dart';
 import 'reminder_service.dart';
 import 'card_snapshot_store.dart';
 import 'pref_store.dart';
+import 'profile_service.dart';
 import 'timetable_store.dart';
 
 /// 会话探测结果：把「网络失败」与「会话失效」分开。
@@ -212,6 +213,9 @@ class AppState extends ChangeNotifier {
     account = '';
     studentName = '';
     studentId = '';
+    // 清掉「已取到姓名的是哪个账号」的标记：不清的话，换个账号登录后
+    // 新账号的姓名永远不会被拉取（标记还停留在旧账号上）。
+    ProfileService.reset();
     _loggedIn = false;
     notifyListeners();
   }

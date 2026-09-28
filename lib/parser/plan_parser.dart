@@ -1,11 +1,6 @@
-/// 培养方案解析（含 PDF 附件路径）
+/// 培养方案解析
 ///
 /// 从鸿蒙版 `parser/PlanParser.ets` 移植。
-///
-/// ===== PDF 路径是动态提取的（不要写死）=====
-/// 附件地址形如 `<iframe src="/ewebeditor/uploadfile/2025033110250359448.pdf">`，
-/// 不同专业、不同年份的名字都不同，页数也不同。
-/// 因此这里只从页面里**正则提取路径**，不做任何文件名或页数的假设。
 ///
 /// ===== 页面结构 =====
 ///   - `#dataList`：引言表。其中「三、课程设置总表」是分隔标题，
@@ -16,6 +11,11 @@
 ///
 /// 课程行数据**从右往左读**：因为左侧的「选课组/课号」列数不固定，
 /// 从右边数位置才是稳定的。
+///
+/// ===== 附件（PDF）解析已删除 =====
+/// 早先这里还从页面里正则提取培养方案 PDF 附件地址（`uploadfile/*.pdf`），
+/// 供下载入口使用。实测本校的培养方案页面里没有任何附件，整套链路
+/// （含 pdf_store / pdf_saver 与原生 savePdf）已随合并改版整块删除。
 library;
 
 import '../model/models.dart';
@@ -38,29 +38,8 @@ class PlanParser {
       _readCourses(mxh, detail);
     }
 
-    detail.pdfPath = _parsePdfPath(html);
     detail.buildGroups();
     return detail;
-  }
-
-  /// 提取 PDF 附件相对地址。
-  ///
-  /// 直接匹配「路径本身」而不是 iframe 标签，这样不依赖引号风格与属性顺序
-  /// （真实页面里出现过单引号、双引号混用）。
-  static String _parsePdfPath(String html) {
-    final RegExpMatch? m = RegExp(
-      r'/[A-Za-z0-9_/.-]*uploadfile/[A-Za-z0-9_.%-]+\.pdf',
-      caseSensitive: false,
-    ).firstMatch(html);
-    if (m != null && m.group(0)!.isNotEmpty) {
-      return m.group(0)!;
-    }
-    // 兜底：任意位置的 .pdf 路径
-    final RegExpMatch? m2 = RegExp(
-      r'[A-Za-z0-9_/.-]+\.pdf',
-      caseSensitive: false,
-    ).firstMatch(html);
-    return m2?.group(0) ?? '';
   }
 
   /// 读引言段落

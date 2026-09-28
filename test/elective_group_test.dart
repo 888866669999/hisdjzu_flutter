@@ -1,10 +1,12 @@
-/// 通选课「大类 → 具体课程」归并与解析测试
+/// 通选课修读情况的解析、归并，以及与培养方案的合并（按课程体系）
 ///
-/// 语料是真实抓取的页面（`test/fixtures/elective.html`）。
+/// 语料是真实抓取的页面（`test/fixtures/elective.html` 与 `plan.html`）。
 ///
 /// 覆盖的是这次改版最容易被改错的三件事：
-///   1. 归并后**不能漏掉任何课程**，也不能多出空组；
-///   2. 「大类没有课」与「课程没有大类」两个方向的错配都要兜住；
+///   1. 两个来源按**归一后的体系名**精确配对 —— 配对不能靠模糊包含，
+///      但两边的原始数据都带装饰（方案侧 `(应修 10 / 已修 6.5)` 的注记、
+///      修读侧 `(必修)` 的性质后缀），所以归一化本身要单独钉住；
+///   2. 一边有一边没有时两边都不能丢（合并页的硬要求）；
 ///   3. 学校留空「要求学分」时**不能画进度条**，也不能判成未达标。
 library;
 
@@ -13,8 +15,11 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hijianzhu_jw/model/models.dart';
 import 'package:hijianzhu_jw/parser/elective_parser.dart';
+import 'package:hijianzhu_jw/parser/plan_parser.dart';
 
 String _html() => File('test/fixtures/elective.html').readAsStringSync();
+
+String _planHtml() => File('test/fixtures/plan.html').readAsStringSync();
 
 void main() {
   group('解析真实页面', () {
@@ -22,7 +27,7 @@ void main() {
       final ElectiveReport r = ElectiveParser.parse(_html());
       expect(r.categories.length, greaterThan(5));
       // 本校页面是单表结构（「学习完成情况查看」），**没有课程明细子表**
-      // —— 每行的「详情」是另一个页面，本应用不去抓。因此这里不要求 courses。
+      // —— 每行的「详情」是另一个页面（展开分组时才去抓）。因此这里不要求 courses。
       //
       // 11 个课程体系 + 一行汇总（写作「总计」）。汇总行**不算类别** ——
       // 早先只认「总学分 / 合计」，于是它不仅没被识别成汇总
@@ -44,7 +49,7 @@ void main() {
     });
   });
 
-  group('大类归并', () {
+  group('大类归并（修读情况内部）', () {
     test('汇总表里的大类全部保留，课程挂到对应大类下', () {
       final ElectiveReport r = ElectiveParser.parse(_html());
       final List<ElectiveGroup> g = r.grouped();
@@ -113,6 +118,109 @@ void main() {
 
     test('空报表不产生任何分组', () {
       expect(ElectiveReport().grouped(), isEmpty);
+    });
+  });
+
+  group('与培养方案合并（按课程体系）', () {
+    test('归一化：剥掉方案侧的注记与修读侧的性质后缀', () {
+      // 修读情况侧：列名就写作「课程体系(属性)」，值形如 `学科基础必修课(必修)`
+      expect(systemMergeKey('学科基础必修课(必修)'), '学科基础必修课');
+      expect(systemMergeKey('专业实践课(实践)'), '专业实践课');
+      // 方案侧：同一格里体系名与 `(应修 10 / 已修 6.5)` 用换行隔开
+      expect(systemMergeKey('素质拓展必修课\n(应修 10 / 已修 6.5)'), '素质拓展必修课');
+      // 全角括号也要认
+      expect(systemMergeKey('公共必修课（必修）'), '公共必修课');
+      // 没有装饰的名字原样返回
+      expect(systemMergeKey('未标注类别'), '未标注类别');
+      expect(systemMergeKey(' 体育保健类 '), '体育保健类');
+      // 括号里就是全部内容时不能剥成空串
+      expect(systemMergeKey('(待定)'), '(待定)');
+    });
+
+    test('注记单独取出：名字归一后那截应修/已修数字不能丢', () {
+      expect(planNoteOf('素质拓展必修课\n(应修 10 / 已修  6.5)'), '(应修 10 / 已修 6.5)');
+      expect(planNoteOf('公共必修课'), '');
+    });
+
+    test('真实语料：两个来源按体系名对齐，课程与进度合并到一张卡片', () {
+      final PlanDetail plan = PlanParser.parse(_planHtml());
+      final List<ElectiveGroup> elective =
+          ElectiveParser.parse(_html()).grouped();
+      final List<MergedPlanGroup> merged =
+          mergePlanAndElective(plan.groups, elective);
+
+      // 语料里培养方案只有 2 个体系（截取过的真实片段），两个都配上了
+      final MergedPlanGroup sz = merged
+          .firstWhere((MergedPlanGroup g) => g.name == '素质拓展必修课');
+      expect(sz.plan, isNotNull);
+      expect(sz.plan!.courses.length, 13);
+      expect(sz.elective, isNotNull);
+      expect(sz.elective!.requiredNumber, 10, reason: '修读侧的应修学分要能读到');
+      expect(sz.planNote, '(应修 10 / 已修 6.5)', reason: '方案格里的注记要保留');
+
+      // 关键：11 个体系一个不丢 —— 2 个配上的 + 9 个只有修读情况的追加
+      expect(merged.length, 11);
+      for (final ElectiveGroup g in elective) {
+        expect(merged.any((MergedPlanGroup m) => m.elective == g), isTrue,
+            reason: '${g.name} 在合并结果里消失了');
+      }
+      // 培养方案侧也不丢
+      for (final PlanGroup g in plan.groups) {
+        expect(merged.any((MergedPlanGroup m) => m.plan == g), isTrue,
+            reason: '${g.system} 在合并结果里消失了');
+      }
+    });
+
+    test('一边有一边没有：都要渲染，不能被丢掉', () {
+      final List<MergedPlanGroup> merged = mergePlanAndElective(
+        <PlanGroup>[
+          PlanGroup('只在方案的体系', <PlanCourse>[PlanCourse(courseName: '课A')], 3),
+        ],
+        <ElectiveGroup>[
+          ElectiveGroup('只在修读的体系')
+            ..info = ElectiveCategory(
+                name: '只在修读的体系', required: '4', earned: '2'),
+        ],
+      );
+      expect(merged.length, 2);
+      // 顺序以培养方案为准，修读侧多出的追加在后
+      expect(merged[0].name, '只在方案的体系');
+      expect(merged[0].plan, isNotNull);
+      expect(merged[0].elective, isNull);
+      expect(merged[1].name, '只在修读的体系');
+      expect(merged[1].plan, isNull);
+      expect(merged[1].elective, isNotNull);
+    });
+
+    test('两边都空时不产生分组（页面显示空态）', () {
+      expect(mergePlanAndElective(<PlanGroup>[], <ElectiveGroup>[]), isEmpty);
+    });
+
+    test('重复名字只配第一个，多出来的不吞掉（追加在后）', () {
+      final ElectiveGroup a = ElectiveGroup('某体系(必修)');
+      final ElectiveGroup b = ElectiveGroup('某体系(限选)');
+      final List<MergedPlanGroup> merged = mergePlanAndElective(
+        <PlanGroup>[PlanGroup('某体系', null, 0)],
+        <ElectiveGroup>[a, b],
+      );
+      expect(merged.length, 2);
+      expect(merged[0].elective, same(a));
+      expect(merged[1].elective, same(b));
+    });
+
+    test('方案侧重名时同一修读分组不重复挂载（第二个只有方案半边）', () {
+      final ElectiveGroup e = ElectiveGroup('某体系(必修)');
+      final List<MergedPlanGroup> merged = mergePlanAndElective(
+        <PlanGroup>[
+          PlanGroup('某体系', null, 0),
+          PlanGroup('某体系 ', null, 0),
+        ],
+        <ElectiveGroup>[e],
+      );
+      expect(merged.length, 2);
+      expect(merged[0].elective, same(e));
+      expect(merged[1].elective, isNull,
+          reason: '同一份进度在一张卡上显示两次会让人以为有两套要求');
     });
   });
 

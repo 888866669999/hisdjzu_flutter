@@ -213,5 +213,32 @@ void main() {
       expect(g.earnedNumber + g.ongoingNumber, 4);
       expect(g.hasCustomRequired, isTrue);
     });
+
+    test('合并到培养方案后，要求仍按**原始**大类名读写（换键会丢用户已录的值）', () async {
+      // 合并页展示的是归一后的体系名（`学科基础必修课`），但修读侧的
+      // ElectiveGroup.name 保持原始值（`学科基础必修课(必修)`）。
+      // 存储键必须继续用原始名 —— 旧版通选页存的就是这个键，
+      // 换成归一名会让已有记录全部失配，用户得重录一遍。
+      final ElectiveReport r = ElectiveReport(
+        categories: <ElectiveCategory>[
+          ElectiveCategory(
+              name: '学科基础必修课(必修)', required: '', earned: '1'),
+        ],
+      );
+      final List<ElectiveGroup> groups = r.grouped();
+      final List<MergedPlanGroup> merged = mergePlanAndElective(
+        <PlanGroup>[PlanGroup('学科基础必修课', null, 0)],
+        groups,
+      );
+      expect(merged.single.name, '学科基础必修课', reason: '卡片标题用归一名');
+
+      // 用户按旧键录过要求 → 叠加时能命中
+      await ElectiveRequirementStore.save('u1', '学科基础必修课(必修)', 8);
+      final Map<String, double> saved = ElectiveRequirementStore.load('u1');
+      final double? v = saved[groups.single.name];
+      expect(v, 8, reason: '按原始名查找必须命中，不能因为合并改键而失配');
+      groups.single.customRequired = v!;
+      expect(merged.single.elective!.requiredNumber, 8);
+    });
   });
 }

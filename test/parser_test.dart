@@ -191,21 +191,22 @@ void main() {
       expect(d.courses.every((PlanCourse c) => c.system.isNotEmpty), isTrue);
     });
 
-    test('PDF 附件地址从页面里解析出来（不写死文件名）', () {
+    test('页面里出现 PDF 附件链接也不影响课程解析（附件功能已删，解析要容忍）', () {
+      // 本校的培养方案实测**没有任何附件**（`uploadfile` / `.pdf` / `附件`
+      // 均不出现），随合并改版删掉了整套附件下载链路（含附件路径解析）。
+      // 但别的学校/未来版本可能往页面里挂附件，解析器不能因此读错课程 ——
+      // 这里在语料上插入一个附件 iframe，断言课程解析结果与原来完全一致。
       final String html = read('plan.html');
-      final PlanDetail d = PlanParser.parse(html);
-      // 真实页面里培养方案正文与附件在同一页；附件是 uploadfile 下的 pdf。
-      // 关键断言是「地址来自页面」而不是任何常量：
-      // 不同专业、不同年份的培养方案文件名与页数都不同。
-      if (d.pdfPath.isNotEmpty) {
-        expect(d.pdfPath, contains('uploadfile'),
-            reason: '附件路径应指向教务系统的 uploadfile 目录');
-        expect(d.pdfPath.toLowerCase(), endsWith('.pdf'));
-      } else {
-        // 某些专业的方案页面确实没有附件；此时 UI 不显示 PDF 卡片。
-        // 这里只要求解析不抛异常，不强行要求一定有附件。
-        expect(d.pdfPath, isEmpty);
-      }
+      final PlanDetail base = PlanParser.parse(html);
+      final PlanDetail withPdf = PlanParser.parse(html.replaceFirst(
+        '<table id="dataList">',
+        '<table id="dataList"><tr><td>'
+            '<iframe src="/ewebeditor/uploadfile/2025033110250359448.pdf">'
+            '</iframe></td></tr>',
+      ));
+      expect(withPdf.courses.length, base.courses.length);
+      expect(withPdf.totalCredit, base.totalCredit);
+      expect(withPdf.groups.length, base.groups.length);
     });
   });
 

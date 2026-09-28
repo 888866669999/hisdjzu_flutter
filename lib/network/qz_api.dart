@@ -332,6 +332,18 @@ class QzApi {
   Future<ElectiveReport> getElectiveReport() async =>
       ElectiveParser.parse(await getElectiveHtml());
 
+  /// 某大类下的课程明细（推导出「详情」页地址后抓取）。
+  ///
+  /// 大类名来自主页解析结果，属**服务端数据**（不是用户输入），
+  /// 但仍按查询参数编码，避免名字里的特殊字符破坏 URL。
+  Future<List<ElectiveCourse>> getElectiveCourses(String categoryName) async {
+    final String url = '$kBaseOrigin$kPathElectiveDetail'
+        '?kctxmc=${Uri.encodeQueryComponent(categoryName)}';
+    final HttpResponse res = await _client.get(url);
+    _checkResponse(res);
+    return ElectiveParser.parseDetail(res.body);
+  }
+
   // ============ 空闲教室（本校接口与参考实现完全不同）============
   //
   // 本校是三段式：

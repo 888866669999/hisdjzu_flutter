@@ -145,4 +145,81 @@ class ElectiveParser {
       ));
     }
   }
+
+  /// 解析「大类详情」页 —— 本校的课程明细来源。
+  ///
+  /// 地址：`/jsxsd/xxwcqk/xxwcqkOnkctxByxq.do?kctxmc=<大类名>`
+  /// （主页每行的「详情」就是 `window.open` 这个地址）。
+  ///
+  /// 实测表头 8 列：
+  ///   `课程编号 | 课程名称 | 学分 | 课程属性 | 课程性质 | 总成绩 | 备注 | 是否学位课`
+  /// 数据行同宽；首行往往是「大类名」单独一格（跨列标题），跳过。
+  ///
+  /// 同样**按表头文字定位列**，不写死列号 —— 各校列数与顺序都可能不同，
+  /// 写死一处错位就会把「学分」读成「成绩」这类静默错误。
+  static List<ElectiveCourse> parseDetail(String html) {
+    final List<ElectiveCourse> out = <ElectiveCourse>[];
+    final HtmlTable? t = HtmlLite.findTableByHeader(html, '课程名称');
+    if (t == null) {
+      return out;
+    }
+    int headerRow = -1;
+    for (int i = 0; i < t.rows.length && i < 4; i++) {
+      if (t.rows[i].text.contains('课程名称')) {
+        headerRow = i;
+        break;
+      }
+    }
+    if (headerRow < 0) {
+      return out;
+    }
+    final List<String> labels =
+        t.rows[headerRow].cells.map((HtmlCell c) => c.text.trim()).toList();
+    int col(List<String> names) {
+      for (final String n in names) {
+        for (int i = 0; i < labels.length; i++) {
+          if (labels[i] == n) {
+            return i;
+          }
+        }
+      }
+      for (final String n in names) {
+        for (int i = 0; i < labels.length; i++) {
+          if (labels[i].contains(n)) {
+            return i;
+          }
+        }
+      }
+      return -1;
+    }
+
+    final int cCode = col(<String>['课程编号', '课程代码']);
+    final int cName = col(<String>['课程名称']);
+    final int cCredit = col(<String>['学分']);
+    final int cAttr = col(<String>['课程属性']);
+    final int cScore = col(<String>['总成绩', '成绩']);
+    final int cRemark = col(<String>['备注']);
+
+    for (int i = headerRow + 1; i < t.rows.length; i++) {
+      final List<HtmlCell> cells = t.rows[i].cells;
+      // 数据行必然是 8 列（与表头同宽）；「大类名」那种跨列标题只有 1 格
+      if (cells.length < 5) {
+        continue;
+      }
+      String at(int n) => (n >= 0 && n < cells.length) ? cells[n].text.trim() : '';
+      final String name = at(cName);
+      if (name.isEmpty || name == '课程名称') {
+        continue;
+      }
+      out.add(ElectiveCourse(
+        courseCode: at(cCode),
+        courseName: name,
+        credit: at(cCredit),
+        attr: at(cAttr),
+        score: at(cScore),
+        remark: at(cRemark),
+      ));
+    }
+    return out;
+  }
 }

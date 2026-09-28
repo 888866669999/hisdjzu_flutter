@@ -183,8 +183,11 @@ class _CalendarSheetState extends State<_CalendarSheet> {
       _refreshing = false;
       if (got != null) {
         _campus = got;
-      } else if (!silent) {
-        // 只有用户**主动**点刷新时才提示失败
+      } else if (!silent &&
+          CampusCalendarService.lastError != '尚未设置校历地址') {
+        // 只有用户**主动**点刷新、且**确实出错**时才提示。
+        // 「尚未设置校历地址」不算错：本校的校历附件是可选来源，
+        // 不填时月历照样由教学周历生成 —— 提示它只会让人以为页面坏了。
         _error = CampusCalendarService.lastError.isEmpty
             ? '未能获取最新作息表'
             : '未能获取最新作息表：${CampusCalendarService.lastError}';
@@ -500,8 +503,11 @@ class _CalendarSheetState extends State<_CalendarSheet> {
     return rows;
   }
 
-  /// 官网校历原图。**只在联网拿到时显示** ——
-  /// 那是当期版本，可以放心当权威参照；拿不到就不显示（原因见文件头）。
+  /// 校历附件（PDF / 图片）。**只在取到时显示**。
+  ///
+  /// 本校的校历是教务处按年发的公告、挂 PDF 附件，因此这里通常为空 ——
+  /// 月历部分由教务系统的教学周历生成，信息已经完整，
+  /// 附件只是可选的原始凭证。
   List<Widget> _officialImages(BuildContext context) {
     final List<String> cached = _campus?.images ?? <String>[];
     if (cached.isEmpty) {
@@ -509,7 +515,7 @@ class _CalendarSheetState extends State<_CalendarSheet> {
     }
     return <Widget>[
       const SizedBox(height: Gaps.l),
-      Text('学校官方校历图',
+      Text('校历附件',
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -517,7 +523,7 @@ class _CalendarSheetState extends State<_CalendarSheet> {
           )),
       const SizedBox(height: 4),
       Text(
-        '来源：学校官网「校园服务 · 最新校历」，下面月历由教务系统教学周历生成。',
+        '下面月历由教务系统教学周历生成，随学年自动更新。',
         style: TextStyle(fontSize: 11, color: context.textTertiary),
       ),
       const SizedBox(height: Gaps.s),

@@ -6,10 +6,17 @@ library;
 
 /// 教务系统基地址。
 ///
-/// 注意：学校**只提供明文 HTTP**，没有可用的 HTTPS 入口，
-/// 因此 Android 侧必须允许明文流量（见 AndroidManifest 的
-/// `android:usesCleartextTraffic`），否则请求会被系统直接拦掉。
-const String kBaseOrigin = 'http://xjwgl.sdjzu.edu.cn';
+/// ===== 用 https（实测两端口都通，https 是更好的一侧）=====
+/// 学校 http / https **都能访问**（都返回 200）。选 https 的理由：
+///   · 登录表单里有**明文密码**（`userPassword` 字段按页面 JS 原样提交），
+///     走 http 等于把它暴露在链路上；
+///   · 五个业务接口在 https 下实测全部 200（登录 / 课表 / 成绩 /
+///     个人信息 / 空教室），没有任何兼容问题。
+///
+/// 留一处明文例外：`android:usesCleartextTraffic` 仍开着 ——
+/// 用户自填的**校历地址**可能是校外的 http 页面，关掉那个开关会让
+/// 「校历抓取」直接失败。教务系统自身已不再依赖它。
+const String kBaseOrigin = 'https://xjwgl.sdjzu.edu.cn';
 
 /// 登录相关
 ///
@@ -92,6 +99,14 @@ const String kPathPlanDetail = '/jsxsd/pyfa/topyfamx';
 
 /// 修读情况（本校叫「学习完成情况查看」）
 const String kPathElective = '/jsxsd/xxwcqk/xxwcqkOnkctxBy.do';
+
+/// 通选大类**详情**页 —— 课程明细的来源（GET 参数 `kctxmc=<大类名>`）。
+///
+/// 通选主页是单表，只有各专业的学分统计；每行的「详情」是页面里
+/// `window.open('/jsxsd/xxwcqk/xxwcqkOnkctxByxq.do?kctxmc=…')`。
+/// 该地址可直接 GET（实测会话与 Referer 都无特殊要求），
+/// 返回 8 列的课程表 —— 大类标题的下拉展开就靠它。
+const String kPathElectiveDetail = '/jsxsd/xxwcqk/xxwcqkOnkctxByxq.do';
 
 /// 空闲教室：筛选器页面（GET）。真正的查询是 POST 到 [kPathClassroomQuery]。
 const String kPathClassroom = '/jsxsd/kbxx/jsjy_query';

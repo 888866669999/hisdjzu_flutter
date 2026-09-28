@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 
 import '../common/result.dart';
 import '../data/app_state.dart';
+import '../data/profile_service.dart';
 import '../data/captcha_solver.dart';
 import '../widgets/credentials_box.dart';
 import '../data/credential_store.dart';
@@ -186,6 +187,10 @@ class _LoginPageState extends State<LoginPage> {
           await CredentialStore.clear();
         }
         await AppState.instance.onLoggedIn(_account.text.trim());
+        // 登录成功就把姓名/学号取回来：它们显示在外壳上，而唯一来源是
+        // 「我的」页那次请求 —— 不主动取的话，用户不进那一页就一直是空白，
+        // 看起来像没登录成功。不 await：它只影响一行字，不该拖慢进主界面。
+        ProfileService.ensureIdentity();
         widget.onLoggedIn();
         return;
       }

@@ -62,7 +62,7 @@ void main() {
     }
   });
 
-  test('培养方案：课程表 + 分组（无 PDF）', () {
+  test('培养方案：课程表 + 分组', () {
     final d = PlanParser.parse(read('plan.html'));
     // ignore: avoid_print
     print('courses=${d.courses.length} groups=${d.groups.length} '

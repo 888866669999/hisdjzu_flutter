@@ -409,7 +409,6 @@ class PlanDetail {
     List<PlanGroup>? groups,
     this.totalCredit = 0,
     this.totalHours = 0,
-    this.pdfPath = '',
   })  : introParagraphs = introParagraphs ?? <String>[],
         detailParagraphs = detailParagraphs ?? <String>[],
         courses = courses ?? <PlanCourse>[],
@@ -421,12 +420,6 @@ class PlanDetail {
   List<PlanGroup> groups;
   double totalCredit;
   double totalHours;
-
-  /// 培养方案附件（PDF）的相对地址，从页面解析得到。
-  ///
-  /// 空串表示该方案没有附件。**不同专业/年份的附件名与页数都不同**，
-  /// 因此这里只存「页面给出的路径」，绝不写死文件名；页数由 PDF 文档自身决定。
-  String pdfPath;
 
   void buildGroups() {
     final Map<String, PlanGroup> map = <String, PlanGroup>{};
@@ -447,7 +440,25 @@ class ElectiveCategory {
     this.required = '',
     this.earned = '',
     this.ongoing = '',
-  });
+    List<ElectiveCourse>? courses,
+  }) : _courses = courses;
+
+  /// 该大类下的课程明细。**按需加载**：只有用户展开时才去抓详情页，
+  /// 首次进入通选页不会为 11 个大类打 11 个请求。
+  ///
+  /// `null` 表示还没加载过；空列表表示加载过但没有课程。
+  List<ElectiveCourse>? _courses;
+
+  List<ElectiveCourse> get courses => _courses ?? <ElectiveCourse>[];
+
+  /// 是否已加载过（用于区分「还没取」与「取到空」）
+  bool get coursesLoaded => _courses != null;
+
+  set courses(List<ElectiveCourse> v) => _courses = v;
+
+  /// 是否有课程可展开。未加载时**不算**没有 —— 界面据 coursesLoaded 决定
+  /// 是「去取」还是「确实没有」。
+  bool get hasCourses => courses.isNotEmpty;
 
   final String name;
   String required;
@@ -469,6 +480,14 @@ class ElectiveCategory {
 }
 
 /// 通选课记录
+/// 通选大类下的一门课
+///
+/// 两个来源共用这个类：
+///   · 参考实现那边是主页自带的「课程明细」子表；
+///   · **本校**的明细在另一个页面 —— 每个大类的「详情」指向
+///     `/jsxsd/xxwcqk/xxwcqkOnkctxByxq.do?kctxmc=<大类名>`，可直接 GET，
+///     返回 8 列表格：`课程编号 | 课程名称 | 学分 | 课程属性 | 课程性质 |
+///     总成绩 | 备注 | 是否学位课`。
 class ElectiveCourse {
   ElectiveCourse({
     this.courseCode = '',
@@ -476,6 +495,8 @@ class ElectiveCourse {
     this.credit = '',
     this.score = '',
     this.category = '',
+    this.attr = '',
+    this.remark = '',
   });
 
   String courseCode;
@@ -484,7 +505,19 @@ class ElectiveCourse {
   String score;
   String category;
 
+  /// 课程属性（必修 / 选修 / 实践…）—— 本校详情页有这一列
+  String attr;
+
+  /// 备注列（本校详情页有，多数为空）
+  String remark;
+
   bool get isOngoing => score.contains('正在修读');
+
+  /// 已出成绩（界面据此把课程归到「已修」而不是「在读」）
+  bool get hasScore => score.isNotEmpty && !isOngoing;
+
+  double creditNumber() =>
+      double.tryParse(credit.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
 }
 
 /// 一个大类 + 它下面的课程（界面按这个分组展示）
@@ -512,6 +545,13 @@ class ElectiveGroup {
   double customRequired = -1;
 
   bool get hasCourses => courses.isNotEmpty;
+
+  /// 是否已尝试加载过课程明细。
+  ///
+  /// 本校的明细在**另一个页面**（每行的「详情」），所以是**按需拉取**：
+  /// 用户点开哪个大类才去抓哪个 —— 首屏不为 11 个大类打 11 个请求。
+  /// 这个标记用来区分「还没取」（可点开）与「取过但没有课程」（不可点）。
+  bool coursesLoaded = false;
 
   /// 是否使用用户自录的要求（界面据此显示「修改」而不是「设置」）
   bool get hasCustomRequired => customRequired >= 0;
@@ -585,4 +625,110 @@ class ElectiveReport {
     }
     return out;
   }
+}
+
+/// 培养方案分组 × 修读情况分组，按「课程体系」对齐后的一个区块。
+///
+/// 两边不一定齐全（实测可能只在一侧出现），因此两个字段都可空：
+///   · [plan] 为空 → 这个体系只在修读情况里出现；
+///   · [elective] 为空 → 这个体系只在培养方案里出现。
+/// 两种都照常渲染（各自只有半边内容），不因为对不上就把谁丢掉。
+class MergedPlanGroup {
+  MergedPlanGroup(this.name, {this.plan, this.elective, this.planNote = ''});
+
+  /// 归一后的体系名：卡片标题，也是展开状态与明细加载的键（见 [systemMergeKey]）
+  final String name;
+
+  /// 培养方案侧的分组（含该体系的课程与学分合计）
+  final PlanGroup? plan;
+
+  /// 修读情况侧的分组（含应修/已修/在修与按需加载的课程明细）
+  final ElectiveGroup? elective;
+
+  /// 培养方案「课程体系」格里附带的注记，如 `(应修 10 / 已修 6.5)`。
+  ///
+  /// 学校把它和体系名挤在同一格（用 `<br>` 分行），过去界面是连名字带注记
+  /// 一起当标题显示。归一后名字单独作标题，这截注记必须继续显示 ——
+  /// 它带着培养方案侧的应修/已修数字，在修读情况缺失时是用户唯一能看到的进度。
+  /// 空串表示没有注记。
+  final String planNote;
+}
+
+/// 「课程体系」列的配对/查询用键。
+///
+/// ===== 为什么不能直接按原样比对 =====
+/// 两页的这一列都带装饰（实测语料）：
+///   · 培养方案：单元格里是 `素质拓展必修课` + `<br>` + `(应修 10 / 已修 6.5)`，
+///     解析出的 system 因此是两行；
+///   · 修读情况：列名就写作「课程体系(属性)」，值形如 `素质拓展必修课(必修)`。
+/// 去掉这层确定格式的装饰后，两边就是同一组体系名。这不是模糊匹配：
+/// 归一后的名字仍按精确相等配对（见 [mergePlanAndElective]）。
+///
+/// 该页自己的「详情」链接用的也是裸名（`toShowxq('学科基础必修课')`），
+/// 因此抓课程明细时同样用它作 kctxmc 参数。
+String systemMergeKey(String name) {
+  // 只取第一行：培养方案侧的注记从第二行开始
+  final String first = name.split('\n').first.trim();
+  // 剥掉尾部那一截括号注记（半角/全角都认）；整串都是括号内容时保留原样
+  final RegExpMatch? m =
+      RegExp(r'^(.*?)[（(][^（()）]*[)）]$').firstMatch(first);
+  final String base = m?.group(1)?.trim() ?? '';
+  return base.isEmpty ? first : base;
+}
+
+/// 取培养方案「课程体系」格中名字之外的那截注记（无则空串）。
+///
+/// 见 [MergedPlanGroup.planNote] 的说明：名字归一后，注记要单独展示。
+String planNoteOf(String system) {
+  final String raw = system.trim();
+  final String key = systemMergeKey(raw);
+  final int at = raw.indexOf(key);
+  if (at < 0) {
+    return '';
+  }
+  // 注记里可能有多余换行/空格（服务端源码缩进），压成一行再显示
+  return raw.substring(at + key.length).replaceAll(RegExp(r'\s+'), ' ').trim();
+}
+
+/// 把培养方案分组与修读情况分组按体系名对齐。
+///
+/// ===== 三条刻意的规则 =====
+///   1. 顺序以**培养方案**为准（本页是培养方案页）：方案里有几个体系就先排
+///      几个，名字相同的修读分组挂进对应卡片；
+///   2. 修读情况里多出来的体系（两边数据不同步时确实会发生）追加在后面，
+///      不丢 —— 否则那些体系的已修/在修与修读记录会凭空消失；
+///   3. 同一个归一名的分组只配**第一个**，其余不吞不并（宁可多出一张
+///      半边内容的卡片，也不静默丢掉一条数据）。两边各自的重名都会走到这条。
+List<MergedPlanGroup> mergePlanAndElective(
+  List<PlanGroup> planGroups,
+  List<ElectiveGroup> electiveGroups,
+) {
+  final Map<String, ElectiveGroup> byKey = <String, ElectiveGroup>{};
+  for (final ElectiveGroup g in electiveGroups) {
+    byKey.putIfAbsent(systemMergeKey(g.name), () => g);
+  }
+  final Set<ElectiveGroup> used = <ElectiveGroup>{};
+  final List<MergedPlanGroup> out = <MergedPlanGroup>[];
+  for (final PlanGroup p in planGroups) {
+    final String key = systemMergeKey(p.system);
+    // 已被前面某个同名分组配走的修读分组不再重复挂载（规则 3）
+    final ElectiveGroup? candidate = byKey[key];
+    final ElectiveGroup? e = used.contains(candidate) ? null : candidate;
+    if (e != null) {
+      used.add(e);
+    }
+    out.add(MergedPlanGroup(
+      key,
+      plan: p,
+      elective: e,
+      planNote: planNoteOf(p.system),
+    ));
+  }
+  for (final ElectiveGroup e in electiveGroups) {
+    if (used.contains(e)) {
+      continue;
+    }
+    out.add(MergedPlanGroup(systemMergeKey(e.name), elective: e));
+  }
+  return out;
 }

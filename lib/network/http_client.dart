@@ -19,7 +19,6 @@ import 'package:http/http.dart' as http;
 
 import '../common/constants.dart';
 import '../common/result.dart';
-import '../common/url_guard.dart';
 import 'cookie_jar.dart';
 
 /// 与鸿蒙版一致的 UA。教务系统对陌生 UA 没有明显拦截，
@@ -212,9 +211,13 @@ class HttpClient {
     }
   }
 
-  /// 取二进制（验证码图片、PDF）。
+  /// 取二进制（验证码图片）。
   ///
-  /// `accept` 由调用方指定：验证码用 `image/*`，PDF 用 `application/pdf`。
+  /// `accept` 由调用方指定：验证码用 `image/*`。
+  /// （这里原本还有一个 `getBinaryValidated`，供培养方案 PDF 附件下载用；
+  /// 实测本校培养方案没有附件，整套 PDF 链路已删除，它随之不再需要。
+  /// 校历附件的下载在 campus_calendar_service 里，自带逐跳 UrlGuard 校验
+  /// 与 304 处理，与本方法不是同一条路径。）
   Future<Uint8List> getBinary(String url, String accept) async {
     try {
       final http.Response res = await http
@@ -238,86 +241,6 @@ class HttpClient {
     } catch (e) {
       throw _netError(e);
     }
-  }
-
-  /// 取二进制，并**逐跳校验 URL**（SSRF 防护）。
-  ///
-  /// 与 [getBinary] 的区别：不自动跟随重定向，而是手动跟，且**每一跳都过
-  /// [UrlGuard]**。只校验首个 URL 是不够的 —— 一个合法公网主机可以 302 到
-  /// `http://127.0.0.1:8080/`，那样防护就被绕过了。
-  ///
-  /// 用途：地址来自**远端页面解析结果**的两条链路（校历图、培养方案 PDF）。
-  /// 这类地址完全由服务端内容决定，必须当作不可信输入。
-  ///
-  /// @param allowedHosts 若非空，则主机必须在此白名单内（更严格）
-  Future<Uint8List> getBinaryValidated(
-    String url,
-    String accept, {
-    Set<String>? allowedHosts,
-  }) async {
-    final Set<String> allow = _withOriginHost(allowedHosts);
-    String current = url;
-    try {
-      for (int hop = 0; hop <= _maxRedirects; hop++) {
-        // 每一跳都校验：协议、主机白名单、环回/私有/保留地址
-        UrlGuard.check(current, allowedHosts: allow);
-
-        final http.Request req = http.Request('GET', _uri(current));
-        req.headers.addAll(_headers(accept: accept));
-        req.followRedirects = false;
-        final http.StreamedResponse streamed =
-            await req.send().timeout(kReadTimeout);
-        final http.Response res = await http.Response.fromStream(streamed);
-        _absorb(_setCookiesOf(res.headers));
-
-        if (res.statusCode >= 300 && res.statusCode < 400) {
-          final String loc = res.headers['location'] ?? '';
-          if (loc.isEmpty) {
-            throw AppError(ErrKind.server, '下载失败：服务端返回了无目标的重定向');
-          }
-          // 相对 Location 需要按当前地址解析成绝对地址
-          current = _uri(current).resolve(loc).toString();
-          continue;
-        }
-        if (res.statusCode >= 400) {
-          throw AppError(ErrKind.server, '下载失败，请稍后重试',
-              'http=${res.statusCode}');
-        }
-        return res.bodyBytes;
-      }
-      throw AppError(ErrKind.server, '下载失败：重定向次数过多');
-    } on TimeoutException {
-      throw AppError(ErrKind.network, '请求超时，请检查网络后重试');
-    } on AppError {
-      rethrow;
-    } catch (e) {
-      throw _netError(e);
-    }
-  }
-
-  /// 重定向上限。与浏览器常见默认值一致，足够正常跳转，
-  /// 又能防止「A→B→A」这类循环把请求打成死循环。
-  static const int _maxRedirects = 5;
-
-  /// 始终把「本应用已知的教务系统域名」并入白名单：
-  /// PDF/校历地址都从该域名的页面里解析出来，没有理由去别的域取。
-  Set<String> _withOriginHost(Set<String>? allowedHosts) {
-    final Set<String> out = <String>{...?allowedHosts};
-    final String host = Uri.tryParse(kBaseOrigin)?.host.toLowerCase() ?? '';
-    if (host.isNotEmpty) {
-      out.add(host);
-    }
-    return out;
-  }
-
-  List<String> _setCookiesOf(Map<String, String> headers) {
-    final List<String> out = <String>[];
-    headers.forEach((String k, String v) {
-      if (k.toLowerCase() == 'set-cookie') {
-        out.add(v);
-      }
-    });
-    return out;
   }
 
   HttpResponse _wrap(http.Response res) {

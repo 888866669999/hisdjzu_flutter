@@ -14,8 +14,7 @@
 | 登录（图形验证码） | 完成 | 本机 ONNX 推理识别（实测 ≈92%）；可记住账号密码（系统密钥库） |
 | 课表 | 完成 | 整周固定一屏（7 天 × 5 节）；本地缓存 + **增删改**；周次/单双周过滤 |
 | 成绩 | 完成 | 学期筛选 + 搜索 + 客户端汇总（总学分 / 平均绩点） |
-| 培养方案 | 完成 | 课程设置总表（按课程体系分级，可折叠）+ **PDF 附件下载** |
-| 通选课修读情况 | 完成 | **大类 → 具体课程**（可折叠）；类别进度 |
+| 培养方案 | 完成 | 按课程体系分组：培养方案课程 + 修读情况（应修/已修/在修、进度条、设置要求学分、修读记录可展开） |
 | 空教室查询 | 完成 | 按校区/楼栋/节次查；客户端做周次与节次过滤 |
 | 个人信息 | 完成 | 学籍信息分组展示 |
 | 桌面卡片 | 完成 | Android App Widget，按时间高亮下一节课；课表改动自动同步 |
@@ -42,7 +41,7 @@ lib/
 │                                 timetable_store / app_state / week_service
 │                                 section_time_store / reminder_service
 │                                 card_snapshot_store / captcha_model / captcha_solver
-│                                 re_auth_service / avatar_store / pdf_store / pdf_saver
+│                                 re_auth_service / avatar_store
 │                                 elective_requirement_store / page_cache(三层缓存)
 │                                 academic_calendar / campus_calendar_service
 │                                 semester_calendar_service
@@ -53,10 +52,10 @@ lib/
 │                                 semester_month_grid / section_time_dialog
 │                                 requirement_editor_dialog / avatar_crop_dialog
 │                                 top_fade_blur
-└── pages/                        shell + login / schedule / score / plan / elective /
+└── pages/                        shell + login / schedule / score / plan /
                                   classroom / profile / settings + top_bar_slot
 shaders/top_fade_blur.frag        顶部渐变模糊着色器
-test/                             354 个用例（解析器 / 缓存 / 布局 / 提醒 / UI …）
+test/                             387 个用例（解析器 / 缓存 / 布局 / 提醒 / UI …）
 test/fixtures/                    人工脱敏过的真实页面语料
 android/app/src/main/
 ├── AndroidManifest.xml

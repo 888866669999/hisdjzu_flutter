@@ -17,6 +17,7 @@ library;
 import 'package:flutter/material.dart';
 
 import '../data/app_state.dart';
+import '../data/profile_service.dart';
 import '../data/campus_calendar_service.dart';
 import '../data/credential_store.dart';
 import '../data/pref_store.dart';
@@ -32,7 +33,6 @@ import '../theme/theme.dart';
 import '../widgets/reauth_dialog.dart';
 import '../widgets/top_fade_blur.dart';
 import 'classroom_page.dart';
-import 'elective_page.dart';
 import 'login_page.dart';
 import 'plan_page.dart';
 import 'profile_page.dart';
@@ -62,15 +62,6 @@ const List<NavItem> kNavItems = <NavItem>[
   NavItem('profile', '我的', Icons.person_outline),
 ];
 
-/// 「修读情况」页的入口 —— **不放 dock**。
-///
-/// 本校的课程体系修读情况（学分要求 / 已修 / 在修）与「培养方案」
-/// 是同一件事的两个视角，看培养方案时最常接着要看的就是它。
-/// 因此改由培养页顶部的入口进入，dock 让出一格给更常用的页面。
-///
-/// 页面本身保留（`ElectivePage`），只是不在导航条上占位。
-const String kElectivePageKey = 'elective';
-
 /// 不在导航项里、但有独立标题的页面。
 ///
 /// 这些页面通过别的入口到达（设置从「我的」进、空教室从课表顶栏进），
@@ -80,6 +71,37 @@ const Map<String, String> kExtraPageTitles = <String, String>{
   'settings': '设置',
   'classroom': '空教室',
 };
+
+/// 顶栏标题与 dock 标签不同的页面。
+///
+/// dock 每格只有约 1/4 屏宽，四个标签都取两字才整齐（课表/成绩/培养/我的）；
+/// 顶栏没有这个限制，用全称更清楚。合并后的「培养」页同时承载培养方案与
+/// 各课程体系的修读情况，顶栏用全称「培养方案」尤其必要。
+const Map<String, String> kFullPageTitles = <String, String>{
+  'plan': '培养方案',
+};
+
+/// 顶栏标题的唯一推导处（含兜底「hi建大」）。
+///
+/// 抽成顶层函数是为了能被导航测试直接覆盖：标题来源有三处
+/// （[kExtraPageTitles] / [kFullPageTitles] / [kNavItems] 的标签），
+/// 散在界面代码里就只能靠阅读确认优先级。
+String pageTitleOf(String key) {
+  final String? extra = kExtraPageTitles[key];
+  if (extra != null) {
+    return extra;
+  }
+  final String? full = kFullPageTitles[key];
+  if (full != null) {
+    return full;
+  }
+  for (final NavItem n in kNavItems) {
+    if (n.key == key) {
+      return n.label;
+    }
+  }
+  return 'hi建大';
+}
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -185,6 +207,10 @@ class _AppShellState extends State<AppShell> {
     }
     // 启动时做一次静默续期尝试：**成功则无感，失败什么都不做**（不弹窗）
     _trySilentRenewal();
+    // 补姓名/学号（外壳上要显示，而它们唯一来源是「我的」页）。
+    // 先只读缓存，避免每次启动都多打一次请求；取不到时由续期成功后的
+    // 那次允许联网的调用补齐（见 _trySilentRenewal 里）。
+    ProfileService.ensureIdentity(allowNetwork: false);
     // 重排上课提醒（课表可能已变、也可能跨周了）
     _rescheduleReminders();
     // 校历/作息：只在缓存过期时才联网（学校一学期才更新一次，
@@ -252,6 +278,10 @@ class _AppShellState extends State<AppShell> {
     } catch (_) {
       // 任何异常都不该影响进入界面
     }
+    // 续期之后（会话此时一定可用）再补一次姓名/学号：
+    // 启动时那次只看缓存，缓存里没有就靠这里联网取。
+    // 放在续期之后，避免会话刚失效时白打一次请求。
+    await ProfileService.ensureIdentity();
   }
 
   Future<void> _rescheduleReminders() async {
@@ -282,8 +312,6 @@ class _AppShellState extends State<AppShell> {
         return ScorePage(key: ValueKey<String>('score-$_epoch'));
       case 'plan':
         return PlanPage(key: ValueKey<String>('plan-$_epoch'));
-      case 'elective':
-        return ElectivePage(key: ValueKey<String>('elective-$_epoch'));
       case 'classroom':
         return ClassroomPage(key: ValueKey<String>('classroom-$_epoch'));
       case 'profile':
@@ -298,18 +326,7 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  String _titleOf() {
-    final String? extra = kExtraPageTitles[_active];
-    if (extra != null) {
-      return extra;
-    }
-    for (final NavItem n in kNavItems) {
-      if (n.key == _active) {
-        return n.label;
-      }
-    }
-    return 'hi建大';
-  }
+  String _titleOf() => pageTitleOf(_active);
 
   @override
   Widget build(BuildContext context) {
@@ -456,11 +473,11 @@ class _AppShellState extends State<AppShell> {
         // 把内边距放进**滚动内容**里（与底部的 `Gaps.scrollTail` 对称），
         // 这样首项仍从栏下开始，而滚动时内容会经过顶栏区域。
         //
-        // 目前接管的是培养方案与通选两页（它们的顶栏下有滚动列表，
+        // 目前接管的是培养方案与我的两页（它们的顶栏下有滚动列表，
         // 模糊才有实际内容可糊）；其余页面顶部是统计栏/固定网格，
         // 没有可滚过的内容，继续由外壳让位即可。
         final bool pageHandlesTopInset =
-            _active == 'plan' || _active == 'elective' || _active == 'profile';
+            _active == 'plan' || _active == 'profile';
         final Widget pageBody = Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
@@ -579,7 +596,7 @@ class _AppShellState extends State<AppShell> {
                     // ——当前在哪一页，底部 dock 的高亮已经说明了。
                     //
                     // 去掉标题后收回的宽度全部给控件，周次与学期不再被压缩。
-                    // 其余页面（培养/成绩/通选/我的）顶栏没有控件，标题是
+                    // 其余页面（培养/成绩/我的）顶栏没有控件，标题是
                     // 唯一的方位标识，保留。
                     //
                     // 条件里带上 `controls != null`：课表页在加载中或加载失败时
